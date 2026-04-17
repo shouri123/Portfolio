@@ -44,3 +44,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Agent and specific config files
+.agent/
+.gemini/
+.gsd/
+AGENTS.md
+CLAUDE.md
+GSD-STYLE.md
+PROJECT_RULES.md
+hf_*
