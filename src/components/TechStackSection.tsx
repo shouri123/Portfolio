@@ -57,8 +57,18 @@ export default function TechStackSection() {
   ];
 
   return (
-    <section id="tech-stack" className="relative w-full min-h-screen bg-[#080808] py-24 md:py-32 px-6 md:px-12 overflow-hidden border-t border-white/5">
-      <div className="bg-noise absolute inset-0 opacity-[0.10] mix-blend-overlay pointer-events-none z-0" />
+    <section id="tech-stack" className="relative w-full min-h-screen bg-black py-24 md:py-32 px-6 md:px-12 overflow-hidden border-t border-white/5">
+      {/* Background Video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 mix-blend-screen pointer-events-none"
+        autoPlay
+        loop
+        muted
+        playsInline
+        src="/videos/tech_bg.mp4"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black pointer-events-none z-10" />
+      <div className="bg-noise absolute inset-0 opacity-[0.10] mix-blend-overlay pointer-events-none z-10" />
       
       <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
         <div className="lg:sticky lg:top-32 w-full lg:w-1/3 text-4xl md:text-6xl lg:text-7xl font-normal leading-tight">
