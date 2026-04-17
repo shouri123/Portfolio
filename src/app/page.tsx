@@ -4,6 +4,8 @@ import FeaturesSection from "@/components/FeaturesSection";
 import GsapMarquee from "@/components/animations/GsapMarquee";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
 import { fetchProjects } from "@/lib/supabase";
+import TechStackSection from "@/components/TechStackSection";
+import FooterSection from "@/components/FooterSection";
 
 export default async function Home() {
   const projects = await fetchProjects();
@@ -16,8 +18,10 @@ export default async function Home() {
         speed={40} 
       />
       <AboutSection />
+      <TechStackSection />
       <ProjectsShowcase projects={projects} />
       <FeaturesSection />
+      <FooterSection />
     </main>
   );
 }
