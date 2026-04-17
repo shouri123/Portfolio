@@ -34,12 +34,23 @@ export default function ProjectsShowcase({ projects }: { projects: any[] }) {
   }, [projects]);
 
   return (
-    <section ref={containerRef} className="h-screen w-full bg-black overflow-hidden relative border-t border-white/5">
+    <section id="projects" ref={containerRef} className="h-screen w-full bg-black overflow-hidden relative border-t border-white/5">
+      {/* Background Video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover opacity-40 z-0 mix-blend-screen pointer-events-none"
+        autoPlay
+        loop
+        muted
+        playsInline
+        src="/videos/project_bg.mp4"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-10" />
+      
       <div className="absolute top-8 left-6 md:top-12 md:left-12 z-20 pointer-events-none">
         <h2 className="text-[#E1E0CC] text-4xl md:text-6xl font-bold tracking-tight">Active <span className="font-serif italic font-normal text-[#DEDBC8]">Builds</span></h2>
       </div>
       
-      <div ref={trackRef} className="flex h-full items-center pt-20 px-[10vw] gap-[8vw] md:gap-[15vw] w-fit">
+      <div ref={trackRef} className="flex h-full items-center pt-20 px-[10vw] gap-[8vw] md:gap-[15vw] w-fit relative z-20">
         {projects.map((project, i) => (
           <div key={project.id} className="w-[85vw] md:w-[65vw] h-[60vh] md:h-[65vh] shrink-0 relative group">
             

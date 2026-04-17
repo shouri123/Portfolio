@@ -50,7 +50,7 @@ export default function FeaturesSection() {
           <GsapWordsPullUpMultiStyle segments={headerSegments} />
         </div>
 
-        <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-2 md:gap-4 lg:gap-3 lg:h-[480px]">
+        <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-2 md:gap-4 lg:gap-3 lg:h-[480px]">
           
           {/* Card 1 - Video Component */}
           <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
@@ -91,33 +91,13 @@ export default function FeaturesSection() {
             </div>
           </Gsap3DTilt>
 
-          {/* Card 3 - Tech Stack */}
-          <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
-            <div className="w-full h-full bg-[#212121] rounded-2xl md:rounded-[2rem] p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
-              <div>
-                <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171741_ed9845ab-f5b2-4018-8ce7-07cc01823522.png&w=1280&q=85" alt="Icon 2" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
-                <h3 className="text-[#DEDBC8] text-xl md:text-2xl font-medium mb-8">Core Tech Stack. <span className="text-gray-600 text-sm align-top ml-1">(02)</span></h3>
-                <ul className="space-y-4">
-                  {["Python, C++, Java", "Next.js, React, TypeScript", "Flask, REST APIs", "MySQL, Supabase"].map((item, i) => (
-                    <li key={i} className="flex gap-3 items-start">
-                      <Check className="text-[#DEDBC8] shrink-0 w-4 h-4 mt-1" />
-                      <span className="text-gray-400 text-sm md:text-sm">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <a href="#" className="flex justify-between items-center text-[#DEDBC8] text-sm md:text-sm font-medium hover:text-white transition-colors uppercase tracking-wide mt-8">
-                Learn more <ArrowRight className="w-4 h-4 -rotate-45" />
-              </a>
-            </div>
-          </Gsap3DTilt>
 
           {/* Card 4 - Projects */}
           <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
             <div className="w-full h-full bg-[#212121] rounded-2xl md:rounded-[2rem] p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
               <div>
                 <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85" alt="Icon 3" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
-                <h3 className="text-[#DEDBC8] text-xl md:text-2xl font-medium mb-8">Recent Projects. <span className="text-gray-600 text-sm align-top ml-1">(03)</span></h3>
+                <h3 className="text-[#DEDBC8] text-xl md:text-2xl font-medium mb-8">Recent Projects. <span className="text-gray-600 text-sm align-top ml-1">(02)</span></h3>
                 <ul className="space-y-4">
                   {["Late-Meet (AI Copilot)", "Aven (TypeScript Platform)", "JAVA-Practice Architecture", "House-Prediction-App"].map((item, i) => (
                     <li key={i} className="flex gap-3 items-start">
