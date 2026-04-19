@@ -23,27 +23,53 @@ export async function fetchProjects() {
     return [
       {
         id: 1,
-        title: "Late-Meet (AI Copilot)",
+        title: "Late-Meet",
         description: "An advanced Chrome extension utilizing local-first LLMs and transcription algorithms to act as a seamless meeting intelligence companion.",
-        live_url: "https://shouri123.github.io/Late-Meet/",
+        live_url: "https://github.com/shouri123/Late-Meet",
+        source_code_url: "https://github.com/shouri123/Late-Meet",
         tech_stack: ["TypeScript", "Chrome Extensions", "VAD", "OpenAI"],
-        theme_color: "#212121"
+        theme_color: "#212121",
+        is_active: true
       },
       {
         id: 2,
         title: "Aven",
-        description: "A comprehensive Next.js web application showcasing sophisticated responsive layouts, modern design tokens, and robust state management.",
-        live_url: "https://shouri123.github.io/aven/",
-        tech_stack: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
-        theme_color: "#252525"
+        description: "A Multi-Agent Multi-Window Architecture (MAMWA) platform for sophisticated agentic workflows and AI-driven interfaces.",
+        live_url: "https://aven-seven.vercel.app",
+        source_code_url: "https://github.com/shouri123/Aven",
+        tech_stack: ["Next.js", "TypeScript", "Multi-Agent", "Vercel"],
+        theme_color: "#252525",
+        is_active: true
       },
       {
         id: 3,
-        title: "JAVA Practice Hub",
-        description: "An immersive, cinematic learning hub for advanced object-oriented programming patterns modeled entirely in Java.",
-        live_url: "https://shouri123.github.io/JAVA-Practice/",
-        tech_stack: ["Java", "OOP", "Algorithm Design", "Next.js"],
-        theme_color: "#1e1e1e"
+        title: "Chat-Buddy",
+        description: "A personality-driven WhatsApp AI agent with memory, guardrails, and a tool-based architecture built using the OpenAI Agents SDK.",
+        live_url: "https://www.npmjs.com/package/chat-buddy",
+        source_code_url: "https://github.com/shouri123/chat-buddy",
+        tech_stack: ["Python", "OpenAI SDK", "WhatsApp", "NPM"],
+        theme_color: "#1a1a1a",
+        is_active: true
+      },
+      {
+        id: 4,
+        title: "Chat-Buddy UI",
+        description: "A sleek, modern frontend interface for the Chat-Buddy AI agent, providing a seamless conversational experience.",
+        live_url: "https://chat-buddy-ui-orcin.vercel.app/",
+        source_code_url: "https://github.com/snackoverflowasad/chat-buddy-ui",
+        tech_stack: ["React", "Next.js", "Vercel", "UI/UX"],
+        theme_color: "#1e1e1e",
+        is_active: true
+      },
+      {
+        id: 5,
+        title: "Java-Tut",
+        description: "An immersive, cinematic learning hub for advanced object-oriented programming patterns and Java fundamentals.",
+        live_url: "https://java-tut.vercel.app/",
+        source_code_url: "https://github.com/shouri123/Java-Tut",
+        tech_stack: ["Java", "OOP", "Next.js", "Vercel"],
+        theme_color: "#1e1e1e",
+        is_active: true
       }
     ];
   }
