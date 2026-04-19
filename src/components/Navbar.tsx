@@ -11,6 +11,7 @@ export default function Navbar() {
     { name: "About", href: "#about" },
     { name: "Tech Stack", href: "#tech-stack" },
     { name: "Projects", href: "#projects" },
+    { name: "Blog", href: "#blog" },
     { name: "Connect", href: "#connect" },
   ];
 
