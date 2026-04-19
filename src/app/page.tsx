@@ -1,10 +1,11 @@
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
-import FeaturesSection from "@/components/FeaturesSection";
 import GsapMarquee from "@/components/animations/GsapMarquee";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
 import { fetchProjects } from "@/lib/supabase";
 import TechStackSection from "@/components/TechStackSection";
+import BlogSection from "@/components/BlogSection";
+import GithubContributions from "@/components/GithubContributions";
 import FooterSection from "@/components/FooterSection";
 
 export default async function Home() {
@@ -20,7 +21,8 @@ export default async function Home() {
       <AboutSection />
       <TechStackSection />
       <ProjectsShowcase projects={projects} />
-      <FeaturesSection />
+      <GithubContributions />
+      <BlogSection />
       <FooterSection />
     </main>
   );
