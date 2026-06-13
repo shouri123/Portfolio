@@ -69,7 +69,7 @@ export default function AboutSection() {
           <div className="w-[280px] sm:w-[320px] h-[360px] sm:h-[400px] relative group">
             <Gsap3DTilt>
               {/* Glowing Outline Background */}
-              <div className="absolute inset-0 rounded-4xl bg-gradient-to-tr from-[#00ff66]/30 to-purple-500/20 blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 rounded-4xl bg-linear-to-tr from-[#00ff66]/30 to-purple-500/20 blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
               
               {/* Outer Card Frame */}
               <div className="absolute inset-0 rounded-4xl border border-white/10 bg-bg-card p-4 flex flex-col justify-between overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
