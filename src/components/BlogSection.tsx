@@ -56,9 +56,14 @@ export default function BlogSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // CR fix: AbortController prevents setState on unmounted component
+    const controller = new AbortController();
+
     const fetchBlogs = async () => {
       try {
-        const res = await fetch("https://dev.to/api/articles?username=shouri123");
+        const res = await fetch("https://dev.to/api/articles?username=shouri123", {
+          signal: controller.signal,
+        });
         if (!res.ok) throw new Error("Could not fetch DEV.to posts");
         const data = await res.json();
         
@@ -80,14 +85,19 @@ export default function BlogSection() {
           setPosts(STATIC_BLOG_POSTS);
         }
       } catch (err) {
+        // Silently ignore abort errors — component unmounted intentionally
+        if (err instanceof Error && err.name === "AbortError") return;
         console.error("DEV.to API error:", err);
         setPosts(STATIC_BLOG_POSTS);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchBlogs();
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {

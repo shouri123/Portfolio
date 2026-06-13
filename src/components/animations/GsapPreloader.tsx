@@ -85,7 +85,7 @@ export default function GsapPreloader({ onComplete }: { onComplete: () => void }
       >
         <source src="/preloader-bg.mp4" type="video/mp4" />
         {/* Fallback gradient if video fails */}
-        <div className="absolute inset-0 bg-linear-to-tr from-[#110022] via-[#050505] to-[#001100]" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#110022] via-[#050505] to-[#001100]" />
       </video>
 
       {/* Futuristic Scanline Overlay */}

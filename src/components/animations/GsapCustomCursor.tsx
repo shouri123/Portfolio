@@ -10,8 +10,11 @@ export default function GsapCustomCursor() {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
+    // CR fix: guard localStorage for SSR — Next.js server renders this component
     const checkPreference = () => {
-      setDisabled(localStorage.getItem("disable_custom_cursor") === "true");
+      if (typeof window !== "undefined") {
+        setDisabled(localStorage.getItem("disable_custom_cursor") === "true");
+      }
     };
     checkPreference();
     window.addEventListener("cursor_preference_change", checkPreference);
@@ -91,7 +94,8 @@ export default function GsapCustomCursor() {
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('mouseout', handleMouseOut);
     };
-  }, []);
+  // CR fix: include `disabled` so listeners are added/removed when prop changes
+  }, [disabled]);
 
   if (!isVisible || disabled) return null;
 

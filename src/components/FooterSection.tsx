@@ -77,7 +77,7 @@ export default function FooterSection() {
         playsInline
         src="/videos/footer_bg.mp4"
       />
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-black z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black z-10 pointer-events-none" />
 
       {/* Main Container */}
       <div className="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 flex flex-col lg:flex-row gap-16 lg:gap-24 items-start justify-between mt-8">

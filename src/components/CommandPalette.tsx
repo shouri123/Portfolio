@@ -54,6 +54,10 @@ export default function CommandPalette() {
     } else {
       document.body.style.overflow = "unset";
     }
+    // CR fix: always restore overflow on unmount so page scroll is never stuck
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [open]);
 
   const closePalette = () => {
@@ -186,12 +190,16 @@ export default function CommandPalette() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    // CR fix: guard against empty list — modulo on 0 produces NaN
+    const len = filteredItems.length;
+    if (len === 0) return;
+
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev + 1) % filteredItems.length);
+      setSelectedIndex((prev) => (prev + 1) % len);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
+      setSelectedIndex((prev) => (prev - 1 + len) % len);
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (filteredItems[selectedIndex]) {

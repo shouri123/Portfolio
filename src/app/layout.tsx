@@ -39,7 +39,8 @@ export default function RootLayout({
     },
     "sameAs": [
       "https://github.com/shouri123",
-      "https://linkedin.com/in/"
+      "https://linkedin.com/in/shouri-chakraborty",
+      "https://instagram.com/devshouri"
     ],
     "knowsAbout": [
       "Generative AI",

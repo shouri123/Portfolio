@@ -135,7 +135,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
           playsInline
           src="/videos/project_bg.mp4"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-black via-transparent to-black pointer-events-none z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-10" />
 
         <div className="relative z-20 max-w-[1400px] mx-auto">
           {/* Section Header */}
@@ -407,7 +407,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
               <div className="grow h-[45vh] lg:h-full relative bg-black">
                 {/* motionsites.ai video background preview overlay wrapper */}
                 <div className="absolute inset-0 bg-[#070707] z-0 flex flex-col items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-linear-to-tr from-[#110022]/15 via-black/80 to-[#00ff66]/5 z-10 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#110022]/15 via-black/80 to-[#00ff66]/5 z-10 pointer-events-none" />
                   <div className="absolute w-[200px] h-[200px] rounded-full bg-[#00ff66]/5 blur-3xl" />
                   {iframeLoading && (
                     <div className="relative z-20 flex flex-col items-center gap-3">
