@@ -105,19 +105,22 @@ export default function GsapCustomCursor() {
   // CR fix: include `disabled` so listeners are added/removed when prop changes
   }, [disabled]);
 
-  if (!isVisible || disabled) return null;
+  // Always render elements so refs are assigned on mount, but control visibility via opacity
+  const showCursor = isVisible && !disabled;
 
   return (
     <>
       {/* Inner Dot Cursor */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-[#00ff66] rounded-full pointer-events-none z-10000 mix-blend-difference"
+        className="fixed top-0 left-0 w-2 h-2 bg-[#00ff66] rounded-full pointer-events-none z-10000 mix-blend-difference transition-opacity duration-300"
+        style={{ opacity: showCursor ? 1 : 0 }}
       />
       {/* Outer Glow Ring */}
       <div
         ref={glowRef}
-        className="fixed top-0 left-0 w-10 h-10 border border-[#00ff66]/60 rounded-full pointer-events-none z-9999 select-none"
+        className="fixed top-0 left-0 w-10 h-10 border border-[#00ff66]/60 rounded-full pointer-events-none z-9999 select-none transition-opacity duration-300"
+        style={{ opacity: showCursor ? 1 : 0 }}
       />
     </>
   );
