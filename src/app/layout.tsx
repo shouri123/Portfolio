@@ -3,6 +3,7 @@ import { Almarai, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CommandPalette from "@/components/CommandPalette";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const almarai = Almarai({
   subsets: ["latin"],
@@ -68,6 +69,7 @@ export default function RootLayout({
           <CommandPalette />
           {children}
         </LenisProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
