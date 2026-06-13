@@ -124,7 +124,7 @@ export default function FooterSection() {
               <InstagramIcon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
             </a>
             <a
-              href="mailto:hello@example.com"
+              href="mailto:chakrabortyshouri@gmail.com"
               className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
               aria-label="Email"
             >
@@ -134,7 +134,7 @@ export default function FooterSection() {
 
           {/* Social Links (text) */}
           <div className="flex flex-wrap gap-x-8 gap-y-4 text-xs md:text-sm uppercase tracking-widest font-semibold text-white/45 w-full">
-            <a href="mailto:hello@example.com" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+            <a href="mailto:chakrabortyshouri@gmail.com" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
               Email <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
             <a href="https://github.com/shouri123" target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">

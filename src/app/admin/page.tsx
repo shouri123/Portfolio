@@ -76,78 +76,28 @@ export default function AdminDashboard() {
     setAuthorized(true);
   }, []);
 
-  // 2. Fetch Messages & Setup Real-time Channels
+  // 2. Fetch Messages
   useEffect(() => {
     if (!authorized) return;
 
     const loadData = async () => {
       setLoading(true);
-      if (supabase) {
-        const { data, error } = await supabase
-          .from("contact_messages")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (error) {
-          console.error("Supabase load error:", error);
-          setMessages(MOCK_INITIAL_MESSAGES);
-        } else {
-          setMessages(data || []);
+      try {
+        const res = await fetch("/api/admin/messages");
+        if (!res.ok) {
+          throw new Error("Failed to fetch messages");
         }
-      } else {
-        // Mock fallback
+        const data = await res.json();
+        setMessages(data || []);
+      } catch (err) {
+        console.error("Failed to load messages from server API:", err);
+        // Fallback to mock data for demo
         setMessages(MOCK_INITIAL_MESSAGES);
       }
       setLoading(false);
     };
 
     loadData();
-
-    // Setup Realtime WebSocket Listener (if Supabase is active)
-    if (supabase) {
-      const client = supabase;
-      const channel = client
-        .channel("admin-db-updates")
-        .on(
-          "postgres_changes",
-          { event: "INSERT", schema: "public", table: "contact_messages" },
-          (payload) => {
-            const newMsg = payload.new as ContactMessage;
-            setMessages((prev) => [newMsg, ...prev]);
-            
-            // Show Live Alert Toast
-            setLiveNotification(`NEW INCOMING: "${newMsg.name}" just sent a message.`);
-            setTimeout(() => setLiveNotification(null), 5000);
-          }
-        )
-        .subscribe();
-
-      return () => {
-        client.removeChannel(channel);
-      };
-    } else {
-      // Mock Real-time simulation (push a message in after 20 seconds for demo WOW effect)
-      let incomingIndex = 0;
-      const mockTimer = setTimeout(() => {
-        if (incomingIndex < MOCK_INCOMING_MESSAGES.length) {
-          const item = MOCK_INCOMING_MESSAGES[incomingIndex];
-          const newMsg: ContactMessage = {
-            id: `mock-incoming-${incomingIndex}`,
-            created_at: new Date().toISOString(),
-            name: item.name,
-            email: item.email,
-            message: item.message,
-            status: "unread"
-          };
-          setMessages((prev) => [newMsg, ...prev]);
-          setLiveNotification(`NEW INCOMING (MOCK WEBSOCKET): "${newMsg.name}" just sent a message.`);
-          setTimeout(() => setLiveNotification(null), 5000);
-          incomingIndex++;
-        }
-      }, 15000);
-
-      return () => clearTimeout(mockTimer);
-    }
   }, [authorized]);
 
   const handleLogout = async () => {
@@ -170,12 +120,15 @@ export default function AdminDashboard() {
       prev.map((msg) => (msg.id === id ? { ...msg, status: nextStatus } : msg))
     );
 
-    if (supabase) {
-      const { error } = await supabase
-        .from("contact_messages")
-        .update({ status: nextStatus })
-        .eq("id", id);
-      if (error) console.error("Database update error:", error);
+    try {
+      const res = await fetch("/api/admin/messages", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: nextStatus })
+      });
+      if (!res.ok) throw new Error("Failed to update status");
+    } catch (err) {
+      console.error("Database update error:", err);
     }
   };
 
@@ -183,12 +136,13 @@ export default function AdminDashboard() {
     // Fade out or filter from state
     setMessages((prev) => prev.filter((msg) => msg.id !== id));
 
-    if (supabase) {
-      const { error } = await supabase
-        .from("contact_messages")
-        .delete()
-        .eq("id", id);
-      if (error) console.error("Database delete error:", error);
+    try {
+      const res = await fetch(`/api/admin/messages?id=${id}`, {
+        method: "DELETE"
+      });
+      if (!res.ok) throw new Error("Failed to delete message");
+    } catch (err) {
+      console.error("Database delete error:", err);
     }
   };
 
@@ -203,12 +157,15 @@ export default function AdminDashboard() {
     );
     setActiveNotesId(null);
 
-    if (supabase) {
-      const { error } = await supabase
-        .from("contact_messages")
-        .update({ admin_notes: tempNotes })
-        .eq("id", id);
-      if (error) console.error("Database notes update error:", error);
+    try {
+      const res = await fetch("/api/admin/messages", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, admin_notes: tempNotes })
+      });
+      if (!res.ok) throw new Error("Failed to save notes");
+    } catch (err) {
+      console.error("Database notes update error:", err);
     }
   };
 

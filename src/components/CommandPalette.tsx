@@ -78,7 +78,7 @@ export default function CommandPalette() {
   };
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("hello@example.com");
+    navigator.clipboard.writeText("chakrabortyshouri@gmail.com");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
