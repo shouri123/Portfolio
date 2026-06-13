@@ -151,8 +151,15 @@ export default function AdminDashboard() {
   }, [authorized]);
 
   const handleLogout = async () => {
-    // Call server-side logout route to clear the HTTP-only session cookie
-    await fetch("/api/admin/logout", { method: "POST" });
+    try {
+      const res = await fetch("/api/admin/logout", { method: "POST" });
+      if (!res.ok) {
+        console.error("Logout request failed with status:", res.status);
+      }
+    } catch (err) {
+      console.error("Logout request failed:", err);
+    }
+    // Proceed with redirect anyway — the server/middleware will re-evaluate auth
     router.push("/admin/login");
     router.refresh();
   };
