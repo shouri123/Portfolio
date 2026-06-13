@@ -5,8 +5,23 @@ import GsapScrollRevealChars from "@/components/animations/GsapScrollRevealChars
 import Gsap3DTilt from "@/components/animations/Gsap3DTilt";
 import Image from "next/image";
 import GssocBadge from "@/components/GssocBadge";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function AboutSection() {
+  const router = useRouter();
+  const [clickCount, setClickCount] = useState(0);
+
+  const handlePhotoClick = () => {
+    setClickCount((prev) => {
+      const nextCount = prev + 1;
+      if (nextCount >= 3) {
+        router.push("/admin");
+        return 0;
+      }
+      return nextCount;
+    });
+  };
   const headingSegments = [
     { text: "I am Shouri," },
     { text: "an aspiring developer.", className: "font-serif italic text-white" },
@@ -68,9 +83,12 @@ export default function AboutSection() {
                 </div>
 
                 {/* Portrait Image container */}
-                <div className="relative grow my-4 rounded-xl overflow-hidden bg-black/40 border border-white/5 flex items-center justify-center">
+                <div 
+                  onClick={handlePhotoClick}
+                  className="relative grow my-4 rounded-xl overflow-hidden bg-black/40 border border-white/5 flex items-center justify-center cursor-pointer select-none"
+                >
                   <Image 
-                    src="/developer_portrait.png" 
+                    src="/developer_portrait.jpg" 
                     alt="Shouri Chakraborty portrait" 
                     fill
                     sizes="(max-w-768px) 280px, 320px"
