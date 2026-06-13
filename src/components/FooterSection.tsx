@@ -1,6 +1,7 @@
 "use client";
 
-import { Mail, ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { Mail, ArrowUpRight, Loader2, CheckCircle2 } from "lucide-react";
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -21,112 +22,239 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 );
 
 export default function FooterSection() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      setStatus("error");
+      setErrorMessage("Please fill out all fields.");
+      return;
+    }
+
+    setStatus("loading");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to submit message.");
+      }
+
+      setStatus("success");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err: any) {
+      console.error("Submission error:", err);
+      setStatus("error");
+      setErrorMessage(err.message || "Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <footer
       id="connect"
-      className="relative w-full min-h-[60vh] flex items-center justify-center overflow-hidden bg-black text-[#DEDBC8] pt-20 pb-10 border-t border-white/5"
+      className="relative w-full min-h-screen bg-black text-primary pt-24 pb-12 border-t border-white/5 overflow-hidden flex flex-col justify-between"
     >
       {/* Background Video */}
       <video
-        className="absolute inset-0 w-full h-full object-cover opacity-40 z-0 mix-blend-screen pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 mix-blend-screen pointer-events-none"
         autoPlay
         loop
         muted
         playsInline
         src="/videos/footer_bg.mp4"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-black z-10 pointer-events-none" />
 
-      <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 w-full max-w-4xl mt-10">
-        <h2 className="text-6xl md:text-[8rem] font-bold tracking-tighter mb-6 leading-none">
-          Let&apos;s{" "}
-          <span className="font-serif italic font-normal text-white">
-            Connect
-          </span>
-        </h2>
-        <p className="text-gray-400 max-w-lg mb-12 text-sm md:text-base">
-          Always open to discussing new projects, creative ideas or
-          opportunities to be part of your visions.
-        </p>
+      {/* Main Container */}
+      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 flex flex-col lg:flex-row gap-16 lg:gap-24 items-start justify-between mt-8">
+        
+        {/* Left Column: Heading and Info */}
+        <div className="w-full lg:w-1/2 flex flex-col items-start text-left">
+          <h2 className="text-6xl md:text-7xl lg:text-[7.5rem] font-bold tracking-tighter mb-8 leading-none">
+            Let&apos;s{" "}
+            <span className="font-serif italic font-normal text-white">
+              Connect
+            </span>
+          </h2>
+          <p className="text-gray-400 max-w-md mb-10 text-sm md:text-base leading-relaxed">
+            Always open to discussing new projects, creative ideas, or opportunities to collaborate in building smarter tools. Feel free to shoot a message!
+          </p>
 
-        {/* Social Icons */}
-        <div className="flex items-center justify-center gap-4 md:gap-6 mb-16">
-          <a
-            href="https://github.com/shouri123"
-            target="_blank"
-            rel="noreferrer"
-            className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/40 hover:text-[#DEDBC8] hover:border-[#DEDBC8]/30 hover:bg-white/[0.06] transition-all duration-300 group"
-            aria-label="GitHub"
-          >
-            <GithubIcon className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300" />
-          </a>
-          <a
-            href="https://linkedin.com/in/"
-            target="_blank"
-            rel="noreferrer"
-            className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/40 hover:text-[#DEDBC8] hover:border-[#DEDBC8]/30 hover:bg-white/[0.06] transition-all duration-300 group"
-            aria-label="LinkedIn"
-          >
-            <LinkedinIcon className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300" />
-          </a>
-          <a
-            href="https://instagram.com/"
-            target="_blank"
-            rel="noreferrer"
-            className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/40 hover:text-[#DEDBC8] hover:border-[#DEDBC8]/30 hover:bg-white/[0.06] transition-all duration-300 group"
-            aria-label="Instagram"
-          >
-            <InstagramIcon className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300" />
-          </a>
-          <a
-            href="mailto:hello@example.com"
-            className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/40 hover:text-[#DEDBC8] hover:border-[#DEDBC8]/30 hover:bg-white/[0.06] transition-all duration-300 group"
-            aria-label="Email"
-          >
-            <Mail className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300" />
-          </a>
+          {/* Social Icons */}
+          <div className="flex items-center justify-start gap-4 mb-10 w-full">
+            <a
+              href="https://github.com/shouri123"
+              target="_blank"
+              rel="noreferrer"
+              className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
+              aria-label="GitHub"
+            >
+              <GithubIcon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+            </a>
+            <a
+              href="https://linkedin.com/in/"
+              target="_blank"
+              rel="noreferrer"
+              className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
+              aria-label="LinkedIn"
+            >
+              <LinkedinIcon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+            </a>
+            <a
+              href="https://instagram.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
+              aria-label="Instagram"
+            >
+              <InstagramIcon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+            </a>
+            <a
+              href="mailto:hello@example.com"
+              className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
+              aria-label="Email"
+            >
+              <Mail className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+            </a>
+          </div>
+
+          {/* Social Links (text) */}
+          <div className="flex flex-wrap gap-x-8 gap-y-4 text-xs md:text-sm uppercase tracking-widest font-semibold text-white/45 w-full">
+            <a href="mailto:hello@example.com" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+              Email <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </a>
+            <a href="https://github.com/shouri123" target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+              Github <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </a>
+            <a href="https://linkedin.com/in/" target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+              LinkedIn <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </a>
+            <a href="https://instagram.com/" target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+              Instagram <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </a>
+          </div>
         </div>
 
-        {/* Text Links */}
-        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-20 text-xs md:text-sm uppercase tracking-widest font-medium">
-          <a
-            href="mailto:hello@example.com"
-            className="hover:text-white flex items-center gap-1 group transition-colors duration-300"
-          >
-            Email
-            <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </a>
-          <a
-            href="https://github.com/shouri123"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-white flex items-center gap-1 group transition-colors duration-300"
-          >
-            Github
-            <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </a>
-          <a
-            href="https://linkedin.com/in/"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-white flex items-center gap-1 group transition-colors duration-300"
-          >
-            LinkedIn
-            <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </a>
-          <a
-            href="https://instagram.com/"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-white flex items-center gap-1 group transition-colors duration-300"
-          >
-            Instagram
-            <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </a>
+        {/* Right Column: Contact Form */}
+        <div className="w-full lg:w-1/2 max-w-xl bg-white/2 border border-white/8 p-8 md:p-10 rounded-4xl backdrop-blur-md relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+
+          {status === "success" ? (
+            <div className="py-12 text-center flex flex-col items-center justify-center gap-4 animate-[fadeIn_0.5s_ease-out]">
+              <CheckCircle2 className="w-16 h-16 text-[#00ff66]/80 animate-[scaleIn_0.3s_ease-out]" />
+              <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight">Transmission Received</h3>
+              <p className="text-gray-400 text-xs md:text-sm max-w-xs leading-relaxed font-mono">
+                [COM-LINK INITIALIZED]<br />
+                Your message has been sent successfully. I will get back to you shortly.
+              </p>
+              <button
+                onClick={() => setStatus("idle")}
+                className="mt-6 text-xs uppercase tracking-widest text-primary hover:text-white border-b border-primary/30 hover:border-white transition-colors pb-1"
+              >
+                Send Another Message
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] text-white/40 uppercase tracking-widest font-mono">Secure COM-LINK Terminal</span>
+              </div>
+
+              {/* Name field */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="name" className="text-white/40 text-[10px] uppercase tracking-widest font-mono">Sender Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                  disabled={status === "loading"}
+                  required
+                  className="w-full bg-white/3 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-primary/50 focus:bg-white/5 transition-all"
+                />
+              </div>
+
+              {/* Email field */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="text-white/40 text-[10px] uppercase tracking-widest font-mono">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="your.email@domain.com"
+                  disabled={status === "loading"}
+                  required
+                  className="w-full bg-white/3 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-primary/50 focus:bg-white/5 transition-all"
+                />
+              </div>
+
+              {/* Message field */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="message" className="text-white/40 text-[10px] uppercase tracking-widest font-mono">Transmission Details</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Type your message here..."
+                  disabled={status === "loading"}
+                  required
+                  rows={4}
+                  className="w-full bg-white/3 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-primary/50 focus:bg-white/5 transition-all resize-none"
+                />
+              </div>
+
+              {/* Error Box */}
+              {status === "error" && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-xl px-4 py-3 text-left font-mono">
+                  ⚠ {errorMessage}
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="w-full bg-primary text-black font-semibold text-sm rounded-xl py-3.5 flex items-center justify-center gap-2 hover:bg-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              >
+                {status === "loading" ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>Broadcasting Transmission...</span>
+                  </>
+                ) : (
+                  <span>Submit Message</span>
+                )}
+              </button>
+            </form>
+          )}
         </div>
 
+      </div>
+
+      {/* Footer Bottom info */}
+      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mt-20">
         <div className="w-full border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-[10px] md:text-xs text-white/30 uppercase tracking-widest gap-4">
-          <p>© {new Date().getFullYear()} Shouri. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Shouri Chakraborty. All rights reserved.</p>
           <p>Engineered for the future.</p>
         </div>
       </div>
