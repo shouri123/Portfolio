@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { timingSafeEqual, createHash } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +16,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
     }
 
-    if (password !== adminPassword) {
+    // Constant-time password comparison to prevent timing attacks
+    const pwdHash = createHash("sha256").update(password).digest();
+    const adminHash = createHash("sha256").update(adminPassword).digest();
+    const isMatch = timingSafeEqual(pwdHash, adminHash);
+
+    if (!isMatch) {
       // Artificial delay to slow brute-force attempts
       await new Promise((r) => setTimeout(r, 800));
       return NextResponse.json(
@@ -39,3 +45,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }
+
