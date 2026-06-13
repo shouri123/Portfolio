@@ -21,6 +21,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Custom Cursor helper to hide default pointer */
+body.nocursor, body.nocursor * {
+  cursor: none !important;
+}
+
 * {
   box-sizing: border-box;
 }

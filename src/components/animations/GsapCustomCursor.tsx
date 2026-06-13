@@ -22,13 +22,20 @@ export default function GsapCustomCursor() {
   }, []);
 
   useEffect(() => {
-    if (disabled) return;
+    if (disabled) {
+      document.body.classList.remove('nocursor');
+      return;
+    }
 
     // Check if device supports hover/mouse pointer
     const mediaQuery = window.matchMedia('(hover: hover)');
-    if (!mediaQuery.matches) return;
+    if (!mediaQuery.matches) {
+      document.body.classList.remove('nocursor');
+      return;
+    }
 
     setIsVisible(true);
+    document.body.classList.add('nocursor');
 
     const dot = dotRef.current;
     const glow = glowRef.current;
@@ -93,6 +100,7 @@ export default function GsapCustomCursor() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('mouseout', handleMouseOut);
+      document.body.classList.remove('nocursor');
     };
   // CR fix: include `disabled` so listeners are added/removed when prop changes
   }, [disabled]);
@@ -109,7 +117,7 @@ export default function GsapCustomCursor() {
       {/* Outer Glow Ring */}
       <div
         ref={glowRef}
-        className="fixed top-0 left-0 w-10 h-10 border border-[#00ff66]/60 rounded-full pointer-events-none z-9999 transition-transform duration-75 ease-out select-none"
+        className="fixed top-0 left-0 w-10 h-10 border border-[#00ff66]/60 rounded-full pointer-events-none z-9999 select-none"
       />
     </>
   );

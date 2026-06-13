@@ -22,10 +22,9 @@ export async function POST(request: Request) {
     }
 
     if (supabase) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("contact_messages")
-        .insert([{ name, email, message, status: "unread" }])
-        .select();
+        .insert([{ name, email, message, status: "unread" }]);
 
       if (error) {
         console.error("Supabase error during message insertion:", error);
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
         );
       }
 
-      return NextResponse.json({ success: true, data });
+      return NextResponse.json({ success: true });
     } else {
       // Mock mode fallback for local development
       console.log("[Mock Contact API] Received submission:", { name, email, message });
