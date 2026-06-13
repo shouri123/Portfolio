@@ -70,15 +70,11 @@ export default function AdminDashboard() {
   const [liveNotification, setLiveNotification] = useState<string | null>(null);
   const router = useRouter();
 
-  // 1. Auth Gate
+  // 1. Auth Gate — middleware already protects this route via HTTP-only cookie.
+  // If we reach this component, the user is authenticated. Just mark authorized.
   useEffect(() => {
-    const token = localStorage.getItem("portfolio_admin_token");
-    if (token !== "authenticated_shouri") {
-      router.push("/admin/login");
-    } else {
-      setAuthorized(true);
-    }
-  }, [router]);
+    setAuthorized(true);
+  }, []);
 
   // 2. Fetch Messages & Setup Real-time Channels
   useEffect(() => {
@@ -154,9 +150,11 @@ export default function AdminDashboard() {
     }
   }, [authorized]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("portfolio_admin_token");
+  const handleLogout = async () => {
+    // Call server-side logout route to clear the HTTP-only session cookie
+    await fetch("/api/admin/logout", { method: "POST" });
     router.push("/admin/login");
+    router.refresh();
   };
 
   const updateMessageStatus = async (id: string | number, nextStatus: "unread" | "read" | "archived") => {

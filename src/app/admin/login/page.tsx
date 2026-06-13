@@ -11,12 +11,10 @@ export default function AdminLoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // If already logged in, skip login screen
-    const isAdmin = localStorage.getItem("portfolio_admin_token");
-    if (isAdmin === "authenticated_shouri") {
-      router.push("/admin");
-    }
-  }, [router]);
+    // If middleware already set a valid session cookie, the server
+    // will redirect us away from this page automatically.
+    // No localStorage check needed here.
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,19 +23,27 @@ export default function AdminLoginPage() {
     setStatus("loading");
     setErrorMsg("");
 
-    // Simulate API verification
-    setTimeout(() => {
-      // In production, this can check against process.env.ADMIN_PASSWORD
-      // Fallback is 'shouri123'
-      const correctPassword = "shouri123";
-      if (password === correctPassword) {
-        localStorage.setItem("portfolio_admin_token", "authenticated_shouri");
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        // Middleware will now allow /admin — HTTP-only cookie is set by server
         router.push("/admin");
+        router.refresh(); // force Next.js to re-evaluate middleware
       } else {
         setStatus("error");
-        setErrorMsg("ACCESS DENIED: INVALID DECRYPTION PASSWORD KEY.");
+        setErrorMsg(data.error || "ACCESS DENIED: INVALID DECRYPTION PASSWORD KEY.");
       }
-    }, 1000);
+    } catch {
+      setStatus("error");
+      setErrorMsg("NETWORK ERROR: Could not reach authentication server.");
+    }
   };
 
   return (
