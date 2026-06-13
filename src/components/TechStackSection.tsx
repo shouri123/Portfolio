@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import GsapWordsPullUpMultiStyle from "./animations/GsapWordsPullUpMultiStyle";
+import GsapNeuralNetwork from "./animations/GsapNeuralNetwork";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,7 +54,7 @@ export default function TechStackSection() {
 
   const headerSegments = [
     { text: "The engineering", className: "text-gray-500 block" },
-    { text: "Foundation", className: "text-[#DEDBC8] block font-serif italic" }
+    { text: "Foundation", className: "text-primary block font-serif italic" }
   ];
 
   return (
@@ -67,28 +68,31 @@ export default function TechStackSection() {
         playsInline
         src="/videos/tech_bg.mp4"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black pointer-events-none z-10" />
+      <div className="absolute inset-0 bg-linear-to-b from-black via-black/80 to-black pointer-events-none z-10" />
       <div className="bg-noise absolute inset-0 opacity-[0.10] mix-blend-overlay pointer-events-none z-10" />
       
       <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
-        <div className="lg:sticky lg:top-32 w-full lg:w-1/3 text-4xl md:text-6xl lg:text-7xl font-normal leading-tight">
-          <GsapWordsPullUpMultiStyle segments={headerSegments} />
-          <p className="mt-8 text-gray-400 text-sm md:text-base max-w-sm leading-relaxed font-sans">
-            A comprehensive overview of the tools, languages, and frameworks leveraged to build scalable architectures and immersive cinematic experiences.
-          </p>
+        <div className="lg:sticky lg:top-24 w-full lg:w-1/3 flex flex-col gap-8">
+          <div className="text-4xl md:text-6xl lg:text-7xl font-normal leading-tight">
+            <GsapWordsPullUpMultiStyle segments={headerSegments} />
+            <p className="mt-6 text-gray-400 text-sm md:text-base max-w-sm leading-relaxed font-sans">
+              A comprehensive overview of the tools, languages, and frameworks leveraged to build scalable architectures and immersive cinematic experiences.
+            </p>
+          </div>
+          <GsapNeuralNetwork />
         </div>
         
         <div ref={containerRef} className="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-16">
           {techCategories.map((cat, i) => (
             <div key={i} className="tech-category flex flex-col gap-6 group">
-              <h3 className="text-xl md:text-2xl font-medium text-[#E1E0CC] tracking-tight flex items-center border-b border-white/10 pb-4 group-hover:border-[#DEDBC8]/50 transition-colors duration-500">
+              <h3 className="text-xl md:text-2xl font-medium text-[#E1E0CC] tracking-tight flex items-center border-b border-white/10 pb-4 group-hover:border-primary/50 transition-colors duration-500">
                 <span className="text-white/20 text-xs font-mono mr-4">/{(i+1).toString().padStart(2, '0')}</span>
                 {cat.title}
               </h3>
               
               <ul className="flex flex-wrap gap-2 md:gap-3">
                 {cat.techs.map((tech, j) => (
-                  <li key={j} className="text-xs md:text-sm text-gray-400 border border-white/5 bg-[#151515] px-4 py-2 rounded-full cursor-default hover:text-black hover:bg-[#DEDBC8] transition-all duration-300">
+                  <li key={j} className="text-xs md:text-sm text-gray-400 border border-white/5 bg-[#151515] px-4 py-2 rounded-full cursor-default hover:text-black hover:bg-primary transition-all duration-300">
                     {tech}
                   </li>
                 ))}

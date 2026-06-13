@@ -1,41 +1,29 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { GitHubCalendar } from "react-github-calendar";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Generate a mock contribution grid (52 weeks x 7 days)
-function generateContributions(): number[][] {
-  const weeks: number[][] = [];
-  for (let w = 0; w < 52; w++) {
-    const week: number[] = [];
-    for (let d = 0; d < 7; d++) {
-      // Weighted random: more 0s, fewer high values
-      const rand = Math.random();
-      if (rand < 0.35) week.push(0);
-      else if (rand < 0.6) week.push(1);
-      else if (rand < 0.8) week.push(2);
-      else if (rand < 0.93) week.push(3);
-      else week.push(4);
-    }
-    weeks.push(week);
-  }
-  return weeks;
-}
-
-const LEVEL_COLORS: Record<number, string> = {
-  0: "bg-white/[0.03]",
-  1: "bg-[#DEDBC8]/15",
-  2: "bg-[#DEDBC8]/30",
-  3: "bg-[#DEDBC8]/55",
-  4: "bg-[#DEDBC8]/85",
+const customTheme = {
+  dark: [
+    "rgba(255, 255, 255, 0.03)", // Level 0
+    "rgba(222, 219, 200, 0.15)", // Level 1
+    "rgba(222, 219, 200, 0.35)", // Level 2
+    "rgba(222, 219, 200, 0.65)", // Level 3
+    "rgba(222, 219, 200, 0.95)", // Level 4
+  ],
 };
 
 export default function GithubContributions() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const contributions = useRef(generateContributions());
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -69,42 +57,33 @@ export default function GithubContributions() {
           <div>
             <h2 className="text-[#E1E0CC] text-2xl md:text-4xl font-bold tracking-tight">
               GitHub{" "}
-              <span className="font-serif italic font-normal text-[#DEDBC8]">
+              <span className="font-serif italic font-normal text-primary">
                 Activity
               </span>
             </h2>
             <p className="text-gray-500 mt-2 text-xs md:text-sm">
-              Contribution graph from the past year.
+              Live contributions fetched directly from Github.
             </p>
-          </div>
-
-          {/* Legend */}
-          <div className="hidden md:flex items-center gap-1.5 text-[10px] text-white/25 uppercase tracking-widest">
-            Less
-            {[0, 1, 2, 3, 4].map((level) => (
-              <div
-                key={level}
-                className={`w-[10px] h-[10px] rounded-[2px] ${LEVEL_COLORS[level]}`}
-              />
-            ))}
-            More
           </div>
         </div>
 
         {/* Contribution Grid */}
-        <div className="rounded-2xl md:rounded-[1.5rem] border border-white/8 bg-[#0a0a0a] p-4 md:p-6 overflow-x-auto">
-          <div className="flex gap-[3px] min-w-[720px]">
-            {contributions.current.map((week, wi) => (
-              <div key={wi} className="flex flex-col gap-[3px]">
-                {week.map((level, di) => (
-                  <div
-                    key={`${wi}-${di}`}
-                    className={`w-[11px] h-[11px] rounded-[2px] ${LEVEL_COLORS[level]} transition-colors duration-200 hover:ring-1 hover:ring-[#DEDBC8]/30`}
-                    title={`Week ${wi + 1}, Day ${di + 1}`}
-                  />
-                ))}
+        <div className="rounded-2xl md:rounded-3xl border border-white/8 bg-[#0a0a0a] p-4 md:p-6 overflow-x-auto">
+          <div className="min-w-[720px] flex justify-center py-2 w-full">
+            {!mounted ? (
+              <div className="h-[140px] animate-pulse bg-white/5 rounded-xl w-full flex items-center justify-center border border-white/5">
+                <span className="text-xs text-white/30 font-mono">LOADING GITHUB ACTIVITY...</span>
               </div>
-            ))}
+            ) : (
+              <GitHubCalendar
+                username="shouri123"
+                colorScheme="dark"
+                theme={customTheme}
+                blockSize={12}
+                blockMargin={3}
+                fontSize={12}
+              />
+            )}
           </div>
         </div>
 
@@ -116,7 +95,7 @@ export default function GithubContributions() {
             { label: "Public Repos", value: "12" },
           ].map((stat) => (
             <div key={stat.label}>
-              <div className="text-[#DEDBC8] text-xl md:text-2xl font-semibold tracking-tight">
+              <div className="text-primary text-xl md:text-2xl font-semibold tracking-tight">
                 {stat.value}
               </div>
               <div className="text-white/20 text-[10px] md:text-xs uppercase tracking-widest mt-1">
