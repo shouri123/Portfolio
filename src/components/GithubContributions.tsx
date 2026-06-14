@@ -73,7 +73,7 @@ export default function GithubContributions() {
       ref={containerRef}
       className="relative w-full bg-black overflow-hidden py-16 md:py-24 px-4 md:px-8 border-t border-white/5"
     >
-      <div className="relative z-10 max-w-[850px] mx-auto contrib-section">
+      <div className="relative z-10 max-w-[1220px] mx-auto contrib-section">
         {/* Header */}
         <div className="flex items-end justify-between mb-8 md:mb-10">
           <div>
@@ -91,7 +91,7 @@ export default function GithubContributions() {
 
         {/* Contribution Grid */}
         <div className="rounded-2xl md:rounded-3xl border border-white/8 bg-[#0a0a0a] p-4 md:p-6 overflow-x-auto">
-          <div className="min-w-[720px] flex justify-center py-2 w-full">
+          <div className="min-w-[1170px] flex justify-center py-2 w-full">
             {!mounted ? (
               <div className="h-[140px] animate-pulse bg-white/5 rounded-xl w-full flex items-center justify-center border border-white/5">
                 <span className="text-xs text-white/30 font-mono">LOADING GITHUB ACTIVITY...</span>
@@ -101,9 +101,9 @@ export default function GithubContributions() {
                 username="shouri123"
                 colorScheme="dark"
                 theme={customTheme}
-                blockSize={12}
-                blockMargin={3}
-                fontSize={12}
+                blockSize={18}
+                blockMargin={4}
+                fontSize={14}
               />
             )}
           </div>
