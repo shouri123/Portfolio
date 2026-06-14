@@ -44,7 +44,7 @@ export default function GssocBadge() {
         </div>
 
         {/* Center: Title & Role */}
-        <div className="flex-grow">
+        <div className="grow">
           <div className="flex items-center gap-2">
             <span className="text-[9px] font-mono text-[#ff9900] bg-[#ff9900]/10 px-2 py-0.5 rounded border border-[#ff9900]/20 font-bold uppercase tracking-wider">
               GSSoC 2026
@@ -56,7 +56,7 @@ export default function GssocBadge() {
           <h4 className="text-white text-base md:text-lg font-bold tracking-tight mt-1.5">
             GirlScript Summer of Code
           </h4>
-          <p className="text-[#DEDBC8]/70 text-xs mt-0.5 flex items-center gap-1 font-mono">
+          <p className="text-primary/70 text-xs mt-0.5 flex items-center gap-1 font-mono">
             <ShieldCheck size={12} className="text-[#ff9900]" /> Program Administrator
           </p>
         </div>

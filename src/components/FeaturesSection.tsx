@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Check, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import GsapWordsPullUpMultiStyle from "./animations/GsapWordsPullUpMultiStyle";
 import Gsap3DTilt from "./animations/Gsap3DTilt";
 
@@ -74,7 +75,7 @@ export default function FeaturesSection() {
           <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
             <div className="w-full h-full bg-bg-feature rounded-2xl md:rounded-4xl p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
               <div>
-                <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85" alt="GenAI and Agentic AI workflows icon" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
+                <Image src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85" alt="GenAI and Agentic AI workflows icon" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" width={48} height={48} unoptimized />
                 <h3 className="text-primary text-xl md:text-2xl font-medium mb-8">GenAI & Agents. <span className="text-gray-600 text-sm align-top ml-1">(01)</span></h3>
                 <ul className="space-y-4">
                   {["LLM Reasoning & RAG", "Coding Agent Systems", "Advanced NLP Modularity", "Prompt Engineering Mastery"].map((item, i) => (
@@ -96,7 +97,7 @@ export default function FeaturesSection() {
           <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
             <div className="w-full h-full bg-bg-feature rounded-2xl md:rounded-4xl p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
               <div>
-                <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85" alt="AI projects and code repositories icon" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
+                <Image src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85" alt="AI projects and code repositories icon" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" width={48} height={48} unoptimized />
                 <h3 className="text-primary text-xl md:text-2xl font-medium mb-8">Recent Projects. <span className="text-gray-600 text-sm align-top ml-1">(02)</span></h3>
                 <ul className="space-y-4">
                   {["Late-Meet (AI Copilot)", "Aven (TypeScript Platform)", "JAVA-Practice Architecture", "House-Prediction-App"].map((item, i) => (

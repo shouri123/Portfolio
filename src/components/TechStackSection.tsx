@@ -68,7 +68,7 @@ export default function TechStackSection() {
         playsInline
         src="/videos/tech_bg.mp4"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black pointer-events-none z-10" />
+      <div className="absolute inset-0 bg-linear-to-b from-black via-black/80 to-black pointer-events-none z-10" />
       <div className="bg-noise absolute inset-0 opacity-[0.10] mix-blend-overlay pointer-events-none z-10" />
       
       <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
