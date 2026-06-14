@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Almarai, Instrument_Serif } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CommandPalette from "@/components/CommandPalette";
@@ -117,6 +118,19 @@ export default function RootLayout({
           {children}
         </LenisProvider>
         <SpeedInsights />
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-HC19S895RB"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-HC19S895RB');
+          `}
+        </Script>
       </body>
     </html>
   );
