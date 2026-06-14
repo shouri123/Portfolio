@@ -73,7 +73,7 @@ export default function GithubContributions() {
       ref={containerRef}
       className="relative w-full bg-black overflow-hidden py-16 md:py-24 px-4 md:px-8 border-t border-white/5"
     >
-      <div className="relative z-10 max-w-[1400px] mx-auto contrib-section">
+      <div className="relative z-10 max-w-[850px] mx-auto contrib-section">
         {/* Header */}
         <div className="flex items-end justify-between mb-8 md:mb-10">
           <div>
