@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
+const gsapCore = gsap;
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X, ArrowUpRight, Star, GitFork, AlertCircle, Play } from 'lucide-react';
 
@@ -11,7 +12,7 @@ const GithubIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-gsap.registerPlugin(ScrollTrigger);
+gsapCore.registerPlugin(ScrollTrigger);
 
 interface Project {
   id: number;
@@ -34,14 +35,18 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [iframeLoading, setIframeLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(4);
+  const prevVisibleCount = useRef(visibleCount);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const activeProjects = projects.filter((p) => p.is_active !== false);
+  const displayedProjects = activeProjects.slice(0, visibleCount);
 
+  // 1. Initial ScrollTrigger Entrance Animations
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // 1. Entrance animation for project cards
-      gsap.fromTo(
+    const ctx = gsapCore.context(() => {
+      // Entrance animation for project cards
+      gsapCore.fromTo(
         '.project-card',
         { opacity: 0, y: 60, scale: 0.96 },
         {
@@ -59,10 +64,11 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
         }
       );
 
-      // 2. Count-up animation for stats
-      gsap.utils.toArray('.stat-counter').forEach((el: any) => {
+      // Count-up animation for stats
+      gsapCore.utils.toArray('.stat-counter').forEach((elNode) => {
+        const el = elNode as HTMLElement;
         const targetVal = parseInt(el.getAttribute('data-target') || '0', 10);
-        gsap.fromTo(
+        gsapCore.fromTo(
           el,
           { textContent: 0 },
           {
@@ -81,13 +87,29 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
     }, containerRef);
 
     return () => ctx.revert();
-  }, [activeProjects]);
+  }, [visibleCount]);
+
+  // 2. Animate newly loaded project cards smoothly
+  useEffect(() => {
+    if (visibleCount > prevVisibleCount.current) {
+      const cards = document.querySelectorAll('.project-card');
+      const newCards = Array.from(cards).slice(prevVisibleCount.current);
+      if (newCards.length > 0) {
+        gsapCore.fromTo(
+          newCards,
+          { opacity: 0, y: 35, scale: 0.98 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.55, stagger: 0.1, ease: 'power3.out' }
+        );
+      }
+      prevVisibleCount.current = visibleCount;
+    }
+  }, [visibleCount]);
 
   // Modal open animation
   useEffect(() => {
     if (selectedProject && modalRef.current) {
       setIframeLoading(true);
-      gsap.fromTo(
+      gsapCore.fromTo(
         modalRef.current,
         { opacity: 0, scale: 0.95, y: 30 },
         { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' }
@@ -95,14 +117,25 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
     }
   }, [selectedProject]);
 
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [selectedProject]);
+
   const openProject = (project: Project) => {
     setSelectedProject(project);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeProject = () => {
     if (modalRef.current) {
-      gsap.to(modalRef.current, {
+      gsapCore.to(modalRef.current, {
         opacity: 0,
         scale: 0.95,
         y: 30,
@@ -110,12 +143,10 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
         ease: 'power2.in',
         onComplete: () => {
           setSelectedProject(null);
-          document.body.style.overflow = 'unset';
         },
       });
     } else {
       setSelectedProject(null);
-      document.body.style.overflow = 'unset';
     }
   };
 
@@ -135,7 +166,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
           playsInline
           src="/videos/project_bg.mp4"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-10" />
+        <div className="absolute inset-0 bg-linear-to-b from-black via-transparent to-black pointer-events-none z-10" />
 
         <div className="relative z-20 max-w-[1400px] mx-auto">
           {/* Section Header */}
@@ -151,7 +182,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
 
           {/* 2-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {activeProjects.map((project) => (
+            {displayedProjects.map((project) => (
               <div
                 key={project.id}
                 className="project-card group cursor-pointer"
@@ -177,7 +208,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
                       <h3 className="text-primary text-xl md:text-2xl font-semibold tracking-tight group-hover:text-white transition-colors duration-300">
                         {project.title}
                       </h3>
-                      <ArrowUpRight className="w-5 h-5 text-white/20 group-hover:text-[#00ff66] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 mt-1" />
+                      <ArrowUpRight className="w-5 h-5 text-white/20 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 mt-1" />
                     </div>
 
                     {/* Description */}
@@ -243,6 +274,18 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
               </div>
             ))}
           </div>
+
+          {/* Load More Button */}
+          {activeProjects.length > visibleCount && (
+            <div className="flex justify-center mt-12 md:mt-16 animate-[fadeIn_0.5s_ease-out]">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + 4)}
+                className="text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-primary/10 text-primary border border-primary/30 hover:bg-primary hover:text-black transition-all duration-300 px-6 py-3 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(222,219,200,0.05)] cursor-pointer"
+              >
+                Load More Projects
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -302,7 +345,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
 
                   {/* Tech Stack */}
                   <div>
-                    <h4 className="text-[#00ff66] text-[10px] font-mono font-bold uppercase tracking-wider mb-2">
+                    <h4 className="text-primary text-[10px] font-mono font-bold uppercase tracking-wider mb-2">
                       Tech Stack Used
                     </h4>
                     <div className="flex flex-wrap gap-1.5">
@@ -333,8 +376,8 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
                   {/* Solution */}
                   {selectedProject.solution && (
                     <div className="border-t border-white/5 pt-4">
-                      <h4 className="text-[#00ff66] text-[10px] font-mono font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <Play className="w-3.5 h-3.5 fill-[#00ff66]/10" />
+                      <h4 className="text-primary text-[10px] font-mono font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Play className="w-3.5 h-3.5 fill-primary/10" />
                         Our Solution
                       </h4>
                       <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
@@ -403,19 +446,19 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
                 </div>
               </div>
 
-              {/* Right Column: Live Iframe */}
-              <div className="grow h-[45vh] lg:h-full relative bg-black">
+              {/* Right Column: Live Iframe Preview (Hidden on Mobile/Tablet to optimize responsiveness) */}
+              <div className="hidden lg:block lg:grow lg:h-full relative bg-black">
                 {/* motionsites.ai video background preview overlay wrapper */}
                 <div className="absolute inset-0 bg-[#070707] z-0 flex flex-col items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#110022]/15 via-black/80 to-[#00ff66]/5 z-10 pointer-events-none" />
-                  <div className="absolute w-[200px] h-[200px] rounded-full bg-[#00ff66]/5 blur-3xl" />
+                  <div className="absolute inset-0 bg-linear-to-tr from-[#110022]/15 via-black/80 to-primary/5 z-10 pointer-events-none" />
+                  <div className="absolute w-[200px] h-[200px] rounded-full bg-primary/5 blur-3xl" />
                   {iframeLoading && (
                     <div className="relative z-20 flex flex-col items-center gap-3">
                       <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff66] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00ff66]"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
                       </span>
-                      <span className="text-[10px] font-mono text-[#00ff66] tracking-[0.2em] uppercase">
+                      <span className="text-[10px] font-mono text-primary tracking-[0.2em] uppercase">
                         CONNECTING LIVE PREVIEW
                       </span>
                     </div>
