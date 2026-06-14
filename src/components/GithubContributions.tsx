@@ -21,7 +21,7 @@ export default function GithubContributions() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({
-    totalContributions: "847+",
+    totalContributions: "1470",
     longestStreak: "23 days",
     publicRepos: "12"
   });
@@ -34,7 +34,7 @@ export default function GithubContributions() {
         if (res.ok) {
           const data = await res.json();
           setStats({
-            totalContributions: `${data.totalContributions}+`,
+            totalContributions: String(data.totalContributions),
             longestStreak: `${data.longestStreak} days`,
             publicRepos: String(data.publicRepos)
           });
@@ -46,6 +46,39 @@ export default function GithubContributions() {
     loadStats();
     return () => clearTimeout(timer);
   }, []);
+
+  // Dynamically append June label at the end of the SVG legend if it is missing
+  useEffect(() => {
+    if (!mounted) return;
+    
+    let attempts = 0;
+    const interval = setInterval(() => {
+      const legend = document.querySelector(".react-activity-calendar__legend-month");
+      if (legend) {
+        const texts = Array.from(legend.querySelectorAll("text"));
+        const hasJunAtEnd = texts.some(
+          t => t.textContent === "Jun" && parseFloat(t.getAttribute("x") || "0") > 1050
+        );
+        
+        if (!hasJunAtEnd) {
+          const newLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          newLabel.setAttribute("x", "1100"); // Positioned near column 51/52 (approx 1100px)
+          newLabel.setAttribute("y", "0");
+          newLabel.setAttribute("dominant-baseline", "hanging");
+          newLabel.setAttribute("fill", "currentColor");
+          newLabel.textContent = "Jun";
+          legend.appendChild(newLabel);
+        }
+        clearInterval(interval);
+      }
+      attempts++;
+      if (attempts > 30) {
+        clearInterval(interval);
+      }
+    }, 500);
+    
+    return () => clearInterval(interval);
+  }, [mounted]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {

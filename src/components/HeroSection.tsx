@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/Navbar";
@@ -13,6 +13,30 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [stats, setStats] = useState({
+    commits: "1470",
+    repos: "18",
+    prReviews: "273"
+  });
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const res = await fetch("/api/github-stats");
+        if (res.ok) {
+          const data = await res.json();
+          setStats({
+            commits: String(data.totalContributions),
+            repos: String(data.publicRepos),
+            prReviews: "273"
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch GitHub stats in Hero:", err);
+      }
+    }
+    loadStats();
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -90,16 +114,16 @@ export default function HeroSection() {
           {/* Stats Bar */}
           <div className="hero-fade-up grid grid-cols-3 gap-2 border-y border-white/10 py-4 my-1">
             <div>
-              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">273+</h4>
+              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{stats.prReviews}</h4>
               <p className="text-[8px] uppercase tracking-widest text-white/40 mt-1 font-mono">PR Reviews</p>
             </div>
             <div>
-              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">18</h4>
+              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{stats.repos}</h4>
               <p className="text-[8px] uppercase tracking-widest text-white/40 mt-1 font-mono">Repos</p>
             </div>
             <div>
-              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">847+</h4>
-              <p className="text-[8px] uppercase tracking-widest text-white/40 mt-1 font-mono">Commits</p>
+              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{stats.commits}</h4>
+              <p className="text-[8px] uppercase tracking-widest text-white/40 mt-1 font-mono">Contributions</p>
             </div>
           </div>
 
