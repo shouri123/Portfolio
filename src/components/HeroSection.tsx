@@ -70,7 +70,6 @@ export default function HeroSection() {
           <h1 className="sr-only">Shouri Chakraborty | AI Developer & Software Engineer Portfolio</h1>
           <GsapWordsPullUp 
             text="Shouri" 
-            showAsterisk 
             className="text-[#E1E0CC] text-[24vw] sm:text-[22vw] md:text-[20vw] lg:text-[18vw] xl:text-[17vw] font-medium leading-[0.85] tracking-[-0.07em]"
           />
         </div>

@@ -43,7 +43,7 @@ export default function GsapWordsPullUp({ text, className = "", showAsterisk = f
   return (
     <div ref={containerRef} className={`flex flex-wrap ${className}`}>
       {words.map((word, i) => (
-        <div key={i} className={`overflow-hidden inline-block mr-[0.25em] ${showAsterisk && i === words.length - 1 ? "pr-[0.35em]" : ""}`}>
+        <div key={i} className="overflow-hidden inline-block mr-[0.25em]">
           <span className="word-inner inline-block relative">
             {word}
             {showAsterisk && i === words.length - 1 && (
