@@ -118,16 +118,23 @@ export default function Navbar() {
         {/* Resume Dropdown Button */}
         <GsapMagnetic strength={10}>
           <div className="relative group/resume">
-            <button className="text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-primary/10 text-primary border border-primary/30 hover:bg-primary hover:text-black transition-all duration-300 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(222,219,200,0.05)]">
+            <a
+              href="/Shouri_Chakraborty_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-primary/10 text-primary border border-primary/30 hover:bg-primary hover:text-black transition-all duration-300 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(222,219,200,0.05)]"
+            >
               <Download className="w-3 h-3" />
               <span>Resume</span>
               <ChevronDown className="w-3 h-3 transition-transform duration-300 group-hover/resume:rotate-180" />
-            </button>
+            </a>
 
             {/* Dropdown Options */}
             <div className="absolute right-0 top-full mt-2 w-48 bg-[#0a0a0a]/95 backdrop-blur-md border border-white/10 rounded-xl py-2 opacity-0 scale-95 pointer-events-none group-hover/resume:opacity-100 group-hover/resume:scale-100 group-hover/resume:pointer-events-auto transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] z-101">
               <a
                 href="/Shouri_Chakraborty_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 download="Shouri_Chakraborty_Resume.pdf"
                 className="flex items-center justify-between px-4 py-2.5 text-[11px] uppercase tracking-wider text-gray-300 hover:text-white hover:bg-white/5 transition-all"
               >
