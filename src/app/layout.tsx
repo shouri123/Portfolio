@@ -99,7 +99,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${almarai.variable} ${instrumentSerif.variable}`}>
+    <html lang="en" className={`${almarai.variable} ${instrumentSerif.variable}`} suppressHydrationWarning>
       <head>
         <link rel="canonical" href="https://devshouri.in" />
         <script
