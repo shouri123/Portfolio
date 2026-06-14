@@ -1,13 +1,34 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { timingSafeEqual, createHash } from "crypto";
+import { signSession } from "@/lib/auth";
+import { isRateLimited, getClientIp, validateString } from "@/lib/security";
 
 export async function POST(request: Request) {
   try {
-    const { password } = await request.json();
+    // 1. Rate Limiting check
+    const ip = getClientIp(request);
+    if (isRateLimited(ip, 5, 10 * 60 * 1000)) { // Max 5 attempts per 10 minutes
+      return NextResponse.json(
+        { error: "TOO MANY LOGIN ATTEMPTS. CONSOLE LOCKED FOR 10 MINUTES." },
+        { status: 429 }
+      );
+    }
 
-    if (!password) {
-      return NextResponse.json({ error: "Password required" }, { status: 400 });
+    // 2. Parse and Validate Request Payload
+    let passwordInput: any;
+    try {
+      const body = await request.json();
+      passwordInput = body.password;
+    } catch {
+      return NextResponse.json({ error: "Invalid payload format" }, { status: 400 });
+    }
+
+    let password = "";
+    try {
+      password = validateString(passwordInput, 100, "Password");
+    } catch (valErr: any) {
+      return NextResponse.json({ error: valErr.message }, { status: 400 });
     }
 
     const adminPassword = process.env.ADMIN_PASSWORD;
@@ -30,9 +51,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Issue a secure HTTP-only session cookie — never exposed to JS
+    // Issue a secure HTTP-only signed session cookie — never exposed to JS
     const cookieStore = await cookies();
-    cookieStore.set("admin_session", "authenticated", {
+    cookieStore.set("admin_session", signSession(), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
@@ -41,8 +62,9 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (err) {
+    console.error("Login API route crash:", err);
+    return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
   }
 }
 

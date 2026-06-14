@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { verifySession } from "@/lib/auth";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -15,7 +16,7 @@ export function proxy(request: NextRequest) {
 
   if (isAdminRoute) {
     const session = request.cookies.get("admin_session");
-    const isAuthenticated = session?.value === "authenticated";
+    const isAuthenticated = verifySession(session?.value);
 
     if (!isAuthenticated) {
       const loginUrl = new URL("/admin/login", request.url);

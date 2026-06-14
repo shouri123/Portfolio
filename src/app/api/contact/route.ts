@@ -1,15 +1,38 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { isRateLimited, getClientIp, stripHtml, validateString } from "@/lib/security";
 
 export async function POST(request: Request) {
   try {
-    const { name, email, message } = await request.json();
-
-    if (!name || !email || !message) {
+    // 1. Rate Limiting Check
+    const ip = getClientIp(request);
+    if (isRateLimited(ip, 5, 10 * 60 * 1000)) {
       return NextResponse.json(
-        { error: "Name, email, and message are required fields." },
-        { status: 400 }
+        { error: "Too many message submissions. Please try again in 10 minutes." },
+        { status: 429 }
       );
+    }
+
+    // 2. Parse and Validate Request Payload
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid payload format" }, { status: 400 });
+    }
+
+    const { name: rawName, email: rawEmail, message: rawMessage } = body;
+
+    let name = "";
+    let email = "";
+    let message = "";
+
+    try {
+      name = validateString(rawName, 100, "Name");
+      email = validateString(rawEmail, 100, "Email");
+      message = validateString(rawMessage, 2000, "Message");
+    } catch (valErr: any) {
+      return NextResponse.json({ error: valErr.message }, { status: 400 });
     }
 
     // Email validation regex
@@ -21,10 +44,22 @@ export async function POST(request: Request) {
       );
     }
 
+    // 3. Sanitization
+    const sanitizedName = stripHtml(name);
+    const sanitizedMessage = stripHtml(message);
+
+    // Double check that we didn't end up with completely empty values after stripping HTML
+    if (!sanitizedName) {
+      return NextResponse.json({ error: "Name cannot be empty after sanitization." }, { status: 400 });
+    }
+    if (!sanitizedMessage) {
+      return NextResponse.json({ error: "Message cannot be empty after sanitization." }, { status: 400 });
+    }
+
     if (supabase) {
       const { error } = await supabase
         .from("contact_messages")
-        .insert([{ name, email, message, status: "unread" }]);
+        .insert([{ name: sanitizedName, email, message: sanitizedMessage, status: "unread" }]);
 
       if (error) {
         console.error("Supabase error during message insertion:", error);
@@ -37,7 +72,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true });
     } else {
       // Mock mode fallback for local development
-      console.log("[Mock Contact API] Received submission:", { name, email, message });
+      console.log("[Mock Contact API] Received submission:", { name: sanitizedName, email, message: sanitizedMessage });
       await new Promise((resolve) => setTimeout(resolve, 800)); // simulate DB network delay
 
       return NextResponse.json({
@@ -46,9 +81,9 @@ export async function POST(request: Request) {
         data: {
           id: "mock-uuid-1234",
           created_at: new Date().toISOString(),
-          name,
+          name: sanitizedName,
           email,
-          message,
+          message: sanitizedMessage,
           status: "unread"
         }
       });

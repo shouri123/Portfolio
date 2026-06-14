@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
+import { verifySession } from "@/lib/auth";
+import { stripHtml, validateString } from "@/lib/security";
 
 // Initialize the Supabase Client with Service Role Key to bypass RLS securely on server
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -19,7 +21,7 @@ const supabaseAdmin = supabaseUrl && supabaseServiceKey
 async function checkAuth() {
   const cookieStore = await cookies();
   const session = cookieStore.get("admin_session")?.value;
-  return session === "authenticated";
+  return verifySession(session);
 }
 
 export async function GET() {
@@ -62,8 +64,13 @@ export async function PATCH(request: Request) {
     }
 
     const updateData: { status?: string; admin_notes?: string } = {};
-    if (status !== undefined) updateData.status = status;
-    if (admin_notes !== undefined) updateData.admin_notes = admin_notes;
+    if (status !== undefined) {
+      updateData.status = validateString(status, 50, "Status");
+    }
+    if (admin_notes !== undefined) {
+      const validatedNotes = validateString(admin_notes, 2000, "Admin Notes", true);
+      updateData.admin_notes = stripHtml(validatedNotes);
+    }
 
     const { data, error } = await supabaseAdmin
       .from("contact_messages")
