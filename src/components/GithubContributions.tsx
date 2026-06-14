@@ -20,9 +20,31 @@ const customTheme = {
 export default function GithubContributions() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [stats, setStats] = useState({
+    totalContributions: "847+",
+    longestStreak: "23 days",
+    publicRepos: "12"
+  });
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    async function loadStats() {
+      try {
+        const res = await fetch("/api/github-stats");
+        if (res.ok) {
+          const data = await res.json();
+          setStats({
+            totalContributions: `${data.totalContributions}+`,
+            longestStreak: `${data.longestStreak} days`,
+            publicRepos: String(data.publicRepos)
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch live GitHub stats:", err);
+      }
+    }
+    loadStats();
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -90,9 +112,9 @@ export default function GithubContributions() {
         {/* Stats Row */}
         <div className="flex flex-wrap gap-6 md:gap-10 mt-6 md:mt-8">
           {[
-            { label: "Total Contributions", value: "847+" },
-            { label: "Longest Streak", value: "23 days" },
-            { label: "Public Repos", value: "12" },
+            { label: "Total Contributions", value: stats.totalContributions },
+            { label: "Longest Streak", value: stats.longestStreak },
+            { label: "Public Repos", value: stats.publicRepos },
           ].map((stat) => (
             <div key={stat.label}>
               <div className="text-primary text-xl md:text-2xl font-semibold tracking-tight">
