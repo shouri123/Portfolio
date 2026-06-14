@@ -17,10 +17,36 @@ export const supabase = supabaseUrl && supabaseAnonKey
 // tech_stack (text array)
 // theme_color (text)
 
+export interface Project {
+  id: number;
+  title: string;
+  description: string;
+  problem?: string;
+  solution?: string;
+  impact?: string;
+  live_url: string;
+  source_code_url?: string;
+  tech_stack: string[];
+  theme_color: string;
+  is_active?: boolean;
+  stars?: number;
+  forks?: number;
+  issues?: number;
+}
+
+let projectsCache: { data: Project[]; timestamp: number } | null = null;
+const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+
 export async function fetchProjects() {
+  const now = Date.now();
+  if (projectsCache && now - projectsCache.timestamp < CACHE_DURATION) {
+    return projectsCache.data;
+  }
+
+  let rawProjects: Project[] = [];
   if (!supabase) {
     // Return graceful fallback mocked payload if DB keys aren't set
-    return [
+    rawProjects = [
       {
         id: 1,
         title: "Late-Meet",
@@ -156,18 +182,91 @@ export async function fetchProjects() {
         is_active: true,
         stars: 5,
         forks: 1
+      },
+      {
+        id: 10,
+        title: "MetaSphere 2026",
+        description: "Official website for MetaSphere 2026, organized by the Department of BCA, IEM Kolkata. Built by a team of students using HTML, Tailwind CSS, and JavaScript, featuring event details, schedule, speakers, and registration information.",
+        problem: "The Department of BCA needed an engaging, central digital hub to host schedule listings, speaker profiles, and registration portals for the MetaSphere 2026 symposium.",
+        solution: "Collaborated on building a fully responsive, high-performance landing page with Tailwind CSS grid structures, fluid animations, and robust contact routing.",
+        impact: "Hosted event information and registrations successfully for over 500+ participants and speakers.",
+        live_url: "https://metasphere2026.iem.edu.in/",
+        source_code_url: "https://github.com/snackoverflowasad/Metasphere-2026",
+        tech_stack: ["HTML5", "CSS3", "Tailwind CSS", "JavaScript"],
+        theme_color: "#1e1e1e",
+        is_active: true,
+        stars: 2,
+        forks: 3,
+        issues: 0
       }
     ];
+  } else {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error("Supabase Fetch Error:", error);
+      return [];
+    }
+    rawProjects = data || [];
   }
 
-  const { data, error } = await supabase
-    .from("projects")
-    .select("*")
-    .order('created_at', { ascending: false });
+  // Fetch GitHub stats for each project with a source_code_url
+  const enrichedProjects = await Promise.all(
+    rawProjects.map(async (project) => {
+      if (!project.source_code_url) return project;
+      
+      const githubMatch = project.source_code_url.match(/github\.com\/([^/]+)\/([^/]+)/);
+      if (!githubMatch) return project;
+      
+      const owner = githubMatch[1];
+      const repo = githubMatch[2].replace(/\.git$/, '').trim();
+      
+      try {
+        const headers: HeadersInit = {
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Portfolio-App'
+        };
+        
+        if (process.env.GITHUB_TOKEN) {
+          headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+        }
+        
+        // Fetch repo info with a 3 second timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+          headers,
+          signal: controller.signal,
+          next: { revalidate: 900 } // Next.js level fetch caching
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (res.ok) {
+          const stats = await res.json();
+          return {
+            ...project,
+            stars: stats.stargazers_count,
+            forks: stats.forks_count,
+            issues: stats.open_issues_count
+          };
+        }
+      } catch (err) {
+        console.warn(`Failed to fetch GitHub stats for ${owner}/${repo}:`, err);
+      }
+      
+      return project;
+    })
+  );
 
-  if (error) {
-    console.error("Supabase Fetch Error:", error);
-    return [];
-  }
-  return data;
+  projectsCache = {
+    data: enrichedProjects,
+    timestamp: now
+  };
+
+  return enrichedProjects;
 }

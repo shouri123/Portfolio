@@ -61,7 +61,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Message ID is required" }, { status: 400 });
     }
 
-    const updateData: any = {};
+    const updateData: { status?: string; admin_notes?: string } = {};
     if (status !== undefined) updateData.status = status;
     if (admin_notes !== undefined) updateData.admin_notes = admin_notes;
 
@@ -77,7 +77,7 @@ export async function PATCH(request: Request) {
     }
 
     return NextResponse.json(data?.[0] || { success: true });
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 }
@@ -110,7 +110,7 @@ export async function DELETE(request: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "Invalid query parameters" }, { status: 400 });
   }
 }

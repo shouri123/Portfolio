@@ -46,19 +46,6 @@ const MOCK_INITIAL_MESSAGES: ContactMessage[] = [
   }
 ];
 
-const MOCK_INCOMING_MESSAGES = [
-  {
-    name: "Google Developer Group",
-    email: "organizers@gdgkolkata.org",
-    message: "Hey Shouri! We saw your portfolio updates. We would love to host you at our next Hackathon as a speaker/mentor. Hit us back!",
-  },
-  {
-    name: "Dev Shouri (Real-time)",
-    email: "shouri@gmail.com",
-    message: "Testing the real-time administrative com-link channel. Connection status: stable, ping 24ms.",
-  }
-];
-
 export default function AdminDashboard() {
   const [authorized, setAuthorized] = useState(false);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
@@ -67,13 +54,13 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeNotesId, setActiveNotesId] = useState<string | number | null>(null);
   const [tempNotes, setTempNotes] = useState("");
-  const [liveNotification, setLiveNotification] = useState<string | null>(null);
   const router = useRouter();
 
   // 1. Auth Gate — middleware already protects this route via HTTP-only cookie.
   // If we reach this component, the user is authenticated. Just mark authorized.
   useEffect(() => {
-    setAuthorized(true);
+    const timer = setTimeout(() => setAuthorized(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // 2. Fetch Messages
@@ -194,16 +181,7 @@ export default function AdminDashboard() {
     <main className="w-full min-h-screen bg-[#070707] text-primary p-6 md:p-12 font-mono relative">
       <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none" />
 
-      {/* Live Push Notification Toast */}
-      {liveNotification && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-[#00ff66]/10 border border-[#00ff66]/40 text-[#00ff66] px-6 py-3.5 rounded-full flex items-center gap-3 shadow-[0_10px_30px_rgba(0,255,102,0.15)] animate-[slideDown_0.3s_ease-out] backdrop-blur-md">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff66] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00ff66]"></span>
-          </span>
-          <span className="text-xs font-bold uppercase tracking-wider">{liveNotification}</span>
-        </div>
-      )}
+
 
       {/* Container wrapper */}
       <div className="max-w-[1400px] mx-auto">
@@ -217,7 +195,7 @@ export default function AdminDashboard() {
             <div>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
                 ADMIN CONSOLE
-                <span className="text-[10px] text-[#00ff66] bg-[#00ff66]/10 px-2 py-0.5 rounded border border-[#00ff66]/20 font-normal tracking-widest flex items-center gap-1 font-mono">
+                <span className="text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20 font-normal tracking-widest flex items-center gap-1 font-mono">
                   <ShieldCheck size={10} /> SECURE
                 </span>
               </h1>
@@ -273,7 +251,7 @@ export default function AdminDashboard() {
                 return (
                   <button
                     key={tab.key}
-                    onClick={() => setActiveTab(tab.key as any)}
+                    onClick={() => setActiveTab(tab.key as "all" | "unread" | "read" | "archived")}
                     className={`flex items-center justify-between text-xs px-4 py-3 rounded-xl transition-all font-semibold uppercase tracking-wider ${
                       activeTab === tab.key 
                         ? "bg-primary text-black" 
