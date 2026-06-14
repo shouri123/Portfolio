@@ -105,8 +105,8 @@ export default function Navbar() {
                   <span className="relative z-10">{link.name}</span>
                   {/* Underline Indicator */}
                   <span
-                    className={`absolute bottom-1 left-2.5 right-2.5 h-[2px] bg-[#00ff66] transition-transform duration-300 ease-out origin-left ${
-                      isActive ? 'scale-x-100 shadow-[0_0_8px_#00ff66]' : 'scale-x-0 group-hover:scale-x-100'
+                    className={`absolute bottom-1 left-2.5 right-2.5 h-[2px] bg-primary transition-transform duration-300 ease-out origin-left ${
+                      isActive ? 'scale-x-100 shadow-[0_0_8px_#DEDBC8]' : 'scale-x-0 group-hover:scale-x-100'
                     }`}
                   />
                 </a>
@@ -118,7 +118,7 @@ export default function Navbar() {
         {/* Resume Dropdown Button */}
         <GsapMagnetic strength={10}>
           <div className="relative group/resume">
-            <button className="text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-[#00ff66]/10 text-[#00ff66] border border-[#00ff66]/30 hover:bg-[#00ff66] hover:text-black transition-all duration-300 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,255,102,0.05)]">
+            <button className="text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-primary/10 text-primary border border-primary/30 hover:bg-primary hover:text-black transition-all duration-300 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(222,219,200,0.05)]">
               <Download className="w-3 h-3" />
               <span>Resume</span>
               <ChevronDown className="w-3 h-3 transition-transform duration-300 group-hover/resume:rotate-180" />
@@ -127,19 +127,20 @@ export default function Navbar() {
             {/* Dropdown Options */}
             <div className="absolute right-0 top-full mt-2 w-48 bg-[#0a0a0a]/95 backdrop-blur-md border border-white/10 rounded-xl py-2 opacity-0 scale-95 pointer-events-none group-hover/resume:opacity-100 group-hover/resume:scale-100 group-hover/resume:pointer-events-auto transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] z-101">
               <a
-                href="/resume-ats.pdf"
-                download
+                href="/Shouri_Chakraborty_Resume.pdf"
+                download="Shouri_Chakraborty_Resume.pdf"
                 className="flex items-center justify-between px-4 py-2.5 text-[11px] uppercase tracking-wider text-gray-300 hover:text-white hover:bg-white/5 transition-all"
               >
-                <span>ATS Resume (PDF)</span>
-                <span className="text-[8px] text-[#00ff66] border border-[#00ff66]/30 px-1 py-0.5 rounded">CLEAN</span>
+                <span>Download (PDF)</span>
+                <span className="text-[8px] text-primary border border-primary/30 px-1 py-0.5 rounded">CLEAN</span>
               </a>
               <a
-                href="/resume-pretty.pdf"
-                download
+                href="https://github.com/shouri123"
+                target="_blank"
+                rel="noreferrer"
                 className="flex items-center justify-between px-4 py-2.5 text-[11px] uppercase tracking-wider text-gray-300 hover:text-white hover:bg-white/5 transition-all"
               >
-                <span>Visual Resume (PDF)</span>
+                <span>GitHub Profile</span>
                 <span className="text-[8px] text-purple-400 border border-purple-400/30 px-1 py-0.5 rounded">pretty</span>
               </a>
             </div>

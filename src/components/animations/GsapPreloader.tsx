@@ -72,7 +72,7 @@ export default function GsapPreloader({ onComplete }: { onComplete: () => void }
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[#050505] text-[#00ff66] font-mono select-none px-6"
+      className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[#050505] text-primary font-mono select-none px-6"
     >
       {/* Video Background Loop - Layered underneath */}
       <video
@@ -85,60 +85,60 @@ export default function GsapPreloader({ onComplete }: { onComplete: () => void }
       >
         <source src="/preloader-bg.mp4" type="video/mp4" />
         {/* Fallback gradient if video fails */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#110022] via-[#050505] to-[#001100]" />
+        <div className="absolute inset-0 bg-linear-to-tr from-[#110022] via-[#050505] to-[#221e1a]" />
       </video>
 
       {/* Futuristic Scanline Overlay */}
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-size-[100%_4px]" />
 
-      <div className="w-full max-w-[800px] bg-black/60 backdrop-blur-md border border-[#00ff66]/20 p-6 rounded-lg shadow-[0_0_40px_rgba(0,255,102,0.15)] relative">
+      <div className="w-full max-w-[800px] bg-black/60 backdrop-blur-md border border-primary/20 p-6 rounded-lg shadow-[0_0_40px_rgba(222,219,200,0.15)] relative">
         {/* Terminal Header */}
-        <div className="flex items-center justify-between border-b border-[#00ff66]/20 pb-3 mb-4">
+        <div className="flex items-center justify-between border-b border-primary/20 pb-3 mb-4">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-red-500/80" />
             <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <span className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="text-xs text-[#00ff66]/60 ml-2">devshouri.in // boot_sequence.sh</span>
+            <span className="text-xs text-primary/60 ml-2">devshouri.in // boot_sequence.sh</span>
           </div>
-          <span className="text-xs text-[#00ff66]/40">v2.1.0</span>
+          <span className="text-xs text-primary/40">v2.1.0</span>
         </div>
 
         {/* Console Logs */}
         <div
           ref={terminalRef}
-          className="h-[250px] overflow-y-auto pr-2 flex flex-col gap-2 text-sm leading-relaxed scrollbar-thin scrollbar-thumb-[#00ff66]/20 scrollbar-track-transparent"
+          className="h-[250px] overflow-y-auto pr-2 flex flex-col gap-2 text-sm leading-relaxed scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent"
         >
           {visibleLogs.map((log, index) => (
             <div key={index} className="flex items-start gap-2">
-              <span className="text-[#00ff66]/40">{`>`}</span>
+              <span className="text-primary/40">{`>`}</span>
               <span>{log}</span>
             </div>
           ))}
           <div className="flex items-center gap-1">
-            <span className="text-[#00ff66]/40">{`>`}</span>
-            <span className="w-2 h-4 bg-[#00ff66] animate-pulse" />
+            <span className="text-primary/40">{`>`}</span>
+            <span className="w-2 h-4 bg-primary animate-pulse" />
           </div>
         </div>
 
         {/* Progress & Stats Footer */}
-        <div className="mt-6 pt-4 border-t border-[#00ff66]/20 flex items-center justify-between">
+        <div className="mt-6 pt-4 border-t border-primary/20 flex items-center justify-between">
           <div className="flex items-center gap-4 w-full mr-6">
-            <span className="text-xs text-[#00ff66]/60 min-w-[32px]">{progress}%</span>
-            <div className="w-full h-1.5 bg-[#00ff66]/10 rounded-full overflow-hidden border border-[#00ff66]/20">
+            <span className="text-xs text-primary/60 min-w-[32px]">{progress}%</span>
+            <div className="w-full h-1.5 bg-primary/10 rounded-full overflow-hidden border border-primary/20">
               <div
-                className="h-full bg-[#00ff66] transition-all duration-75 ease-out shadow-[0_0_8px_#00ff66]"
+                className="h-full bg-primary transition-all duration-75 ease-out shadow-[0_0_8px_#DEDBC8]"
                 style={{ width: `${progress}%` }}
               />
             </div>
           </div>
-          <span className="text-xs text-[#00ff66]/60 uppercase tracking-widest min-w-[90px] text-right">
+          <span className="text-xs text-primary/60 uppercase tracking-widest min-w-[90px] text-right">
             {progress === 100 ? 'READY' : 'COMPILING'}
           </span>
         </div>
       </div>
 
       {/* Decorative Matrix Watermark */}
-      <div className="absolute bottom-6 right-6 text-[10px] text-[#00ff66]/20 flex flex-col items-end pointer-events-none select-none font-sans">
+      <div className="absolute bottom-6 right-6 text-[10px] text-primary/20 flex flex-col items-end pointer-events-none select-none font-sans">
         <span>LATENCY: 12ms</span>
         <span>SHOURI CHAKRABORTY // PORTFOLIO ELEVATION</span>
       </div>

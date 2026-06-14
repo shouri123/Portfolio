@@ -56,10 +56,10 @@ export default function FooterSection() {
 
       setStatus("success");
       setFormData({ name: "", email: "", message: "" });
-    } catch (err: any) {
+    } catch (err) {
       console.error("Submission error:", err);
       setStatus("error");
-      setErrorMessage(err.message || "Something went wrong. Please try again.");
+      setErrorMessage(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   };
 
@@ -155,7 +155,7 @@ export default function FooterSection() {
 
           {status === "success" ? (
             <div className="py-12 text-center flex flex-col items-center justify-center gap-4 animate-[fadeIn_0.5s_ease-out]">
-              <CheckCircle2 className="w-16 h-16 text-[#00ff66]/80 animate-[scaleIn_0.3s_ease-out]" />
+              <CheckCircle2 className="w-16 h-16 text-primary/80 animate-[scaleIn_0.3s_ease-out]" />
               <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight">Transmission Received</h3>
               <p className="text-gray-400 text-xs md:text-sm max-w-xs leading-relaxed font-mono">
                 [COM-LINK INITIALIZED]<br />
@@ -171,7 +171,7 @@ export default function FooterSection() {
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div className="flex items-center gap-2 mb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 <span className="text-[10px] text-white/40 uppercase tracking-widest font-mono">Secure COM-LINK Terminal</span>
               </div>
 

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { 
   Search, CornerDownLeft, X, Home, Info, Cpu, FolderGit, 
-  BookOpen, MessageSquare, Shield, Copy, Check, Download, MousePointer 
+  BookOpen, MessageSquare, Shield, Copy, Check, Download 
 } from "lucide-react";
 import gsap from "gsap";
 
@@ -19,8 +19,7 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [copied, setCopied] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -42,12 +41,12 @@ export default function CommandPalette() {
     if (open) {
       document.body.style.overflow = "hidden";
       gsap.fromTo(
-        overlayRef.current,
+        "#command-overlay",
         { opacity: 0 },
         { opacity: 1, duration: 0.3, ease: "power2.out" }
       );
       gsap.fromTo(
-        dialogRef.current,
+        "#command-dialog",
         { scale: 0.95, y: -20, opacity: 0 },
         { scale: 1, y: 0, opacity: 1, duration: 0.4, delay: 0.05, ease: "power3.out" }
       );
@@ -60,22 +59,22 @@ export default function CommandPalette() {
     };
   }, [open]);
 
-  const closePalette = () => {
-    gsap.to(dialogRef.current, {
+  const closePalette = useCallback(() => {
+    gsap.to("#command-dialog", {
       scale: 0.95,
       y: -20,
       opacity: 0,
       duration: 0.2,
       ease: "power2.in",
     });
-    gsap.to(overlayRef.current, {
+    gsap.to("#command-overlay", {
       opacity: 0,
       duration: 0.2,
       delay: 0.05,
       ease: "power2.in",
       onComplete: () => setOpen(false),
     });
-  };
+  }, []);
 
   const copyEmail = () => {
     navigator.clipboard.writeText("chakrabortyshouri@gmail.com");
@@ -83,11 +82,7 @@ export default function CommandPalette() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const toggleCursor = () => {
-    const disabled = localStorage.getItem("disable_custom_cursor") === "true";
-    localStorage.setItem("disable_custom_cursor", disabled ? "false" : "true");
-    window.dispatchEvent(new Event("cursor_preference_change"));
-  };
+
 
   const items = [
     {
@@ -163,13 +158,7 @@ export default function CommandPalette() {
       title: "Download Professional Resume",
       category: "Utility",
       icon: Download,
-      action: () => window.open("/resume.pdf", "_blank")
-    },
-    {
-      title: "Toggle Custom Cursor Glow",
-      category: "Utility",
-      icon: MousePointer,
-      action: toggleCursor
+      action: () => window.open("/Shouri_Chakraborty_Resume.pdf", "_blank")
     },
     {
       title: "Go to Secure Admin Terminal",
@@ -184,10 +173,7 @@ export default function CommandPalette() {
     item.category.toLowerCase().includes(query.toLowerCase())
   );
 
-  const handleSelect = (action: () => void) => {
-    action();
-    closePalette();
-  };
+
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // CR fix: guard against empty list — modulo on 0 produces NaN
@@ -203,7 +189,8 @@ export default function CommandPalette() {
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (filteredItems[selectedIndex]) {
-        handleSelect(filteredItems[selectedIndex].action);
+        filteredItems[selectedIndex].action();
+        closePalette();
       }
     }
   };
@@ -212,12 +199,12 @@ export default function CommandPalette() {
 
   return (
     <div
-      ref={overlayRef}
+      id="command-overlay"
       className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-start justify-center pt-[15vh] px-4 font-mono text-primary"
       onClick={closePalette}
     >
       <div
-        ref={dialogRef}
+        id="command-dialog"
         className="w-full max-w-xl bg-zinc-950 border border-white/10 rounded-3xl overflow-hidden shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
@@ -257,7 +244,10 @@ export default function CommandPalette() {
               return (
                 <button
                   key={item.title}
-                  onClick={() => handleSelect(item.action)}
+                  onClick={() => {
+                    item.action();
+                    closePalette();
+                  }}
                   onMouseEnter={() => setSelectedIndex(index)}
                   className={`w-full text-left px-4 py-3 flex items-center justify-between text-xs transition-colors ${
                     isSelected ? "bg-white/4 text-white" : "text-white/50"

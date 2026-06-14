@@ -68,7 +68,16 @@ export default function BlogSection() {
         const data = await res.json();
         
         if (data && Array.isArray(data) && data.length > 0) {
-          const parsed: BlogPost[] = data.slice(0, 3).map((item: any) => ({
+          interface DevToArticle {
+            id: number;
+            title: string;
+            description?: string;
+            published_at: string;
+            tag_list?: string[];
+            reading_time_minutes?: number;
+            url: string;
+          }
+          const parsed: BlogPost[] = data.slice(0, 3).map((item: DevToArticle) => ({
             id: item.id,
             title: item.title,
             excerpt: item.description || "Click to read this article on DEV.to.",

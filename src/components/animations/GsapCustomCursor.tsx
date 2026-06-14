@@ -13,7 +13,8 @@ export default function GsapCustomCursor() {
     // CR fix: guard localStorage for SSR — Next.js server renders this component
     const checkPreference = () => {
       if (typeof window !== "undefined") {
-        setDisabled(localStorage.getItem("disable_custom_cursor") === "true");
+        const isCursorDisabled = localStorage.getItem("disable_custom_cursor") === "true";
+        setTimeout(() => setDisabled(isCursorDisabled), 0);
       }
     };
     checkPreference();
@@ -34,7 +35,7 @@ export default function GsapCustomCursor() {
       return;
     }
 
-    setIsVisible(true);
+    const timer = setTimeout(() => setIsVisible(true), 0);
     document.body.classList.add('nocursor');
 
     const dot = dotRef.current;
@@ -81,12 +82,12 @@ export default function GsapCustomCursor() {
       const isLink = target.closest('a') || target.closest('button') || target.closest('[role="button"]') || target.classList.contains('cursor-pointer');
 
       if (isLink) {
-        gsap.to(dot, { scale: 1, backgroundColor: '#00ff66', duration: 0.2 });
+        gsap.to(dot, { scale: 1, backgroundColor: '#DEDBC8', duration: 0.2 });
         gsap.to(glow, { 
           scale: 1, 
-          borderColor: '#00ff66', 
+          borderColor: '#DEDBC8', 
           backgroundColor: 'transparent',
-          boxShadow: '0 0 0px rgba(0, 255, 102, 0)',
+          boxShadow: '0 0 0px rgba(222, 219, 200, 0)',
           duration: 0.2 
         });
       }
@@ -101,6 +102,7 @@ export default function GsapCustomCursor() {
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('mouseout', handleMouseOut);
       document.body.classList.remove('nocursor');
+      clearTimeout(timer);
     };
   // CR fix: include `disabled` so listeners are added/removed when prop changes
   }, [disabled]);
@@ -113,13 +115,13 @@ export default function GsapCustomCursor() {
       {/* Inner Dot Cursor */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-[#00ff66] rounded-full pointer-events-none z-10000 mix-blend-difference transition-opacity duration-300"
+        className="fixed top-0 left-0 w-2 h-2 bg-primary rounded-full pointer-events-none z-10000 mix-blend-difference transition-opacity duration-300"
         style={{ opacity: showCursor ? 1 : 0 }}
       />
       {/* Outer Glow Ring */}
       <div
         ref={glowRef}
-        className="fixed top-0 left-0 w-10 h-10 border border-[#00ff66]/60 rounded-full pointer-events-none z-9999 select-none transition-opacity duration-300"
+        className="fixed top-0 left-0 w-10 h-10 border border-primary/60 rounded-full pointer-events-none z-9999 select-none transition-opacity duration-300"
         style={{ opacity: showCursor ? 1 : 0 }}
       />
     </>
