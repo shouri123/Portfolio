@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import GsapPreloader from '@/components/animations/GsapPreloader';
-import GsapCustomCursor from '@/components/animations/GsapCustomCursor';
 import HeroSection from '@/components/HeroSection';
 import GsapMarquee from '@/components/animations/GsapMarquee';
 import AboutSection from '@/components/AboutSection';
 import TechStackSection from '@/components/TechStackSection';
 import ProjectsShowcase from '@/components/ProjectsShowcase';
+import AchievementsSection from '@/components/AchievementsSection';
 import GithubContributions from '@/components/GithubContributions';
 import BlogSection from '@/components/BlogSection';
 import FooterSection from '@/components/FooterSection';
@@ -53,7 +53,6 @@ export default function HomeClient({ initialProjects }: HomeClientProps) {
   return (
     <>
       {isLoading && <GsapPreloader onComplete={() => setIsLoading(false)} />}
-      <GsapCustomCursor />
       {/* CR fix: Defer mounting heavy sections until preloader completes — prevents
           BlogSection & GithubContributions from firing network requests during animation */}
       {!isLoading && (
@@ -66,6 +65,7 @@ export default function HomeClient({ initialProjects }: HomeClientProps) {
           <AboutSection />
           <TechStackSection />
           <ProjectsShowcase projects={initialProjects} />
+          <AchievementsSection />
           <GithubContributions />
           <BlogSection />
           <FooterSection />
