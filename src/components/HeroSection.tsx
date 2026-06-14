@@ -71,7 +71,7 @@ export default function HeroSection() {
           <GsapWordsPullUp 
             text="Shouri" 
             showAsterisk 
-            className="text-[#E1E0CC] text-[26vw] sm:text-[24vw] md:text-[22vw] lg:text-[20vw] xl:text-[19vw] font-medium leading-[0.85] tracking-[-0.07em]"
+            className="text-[#E1E0CC] text-[24vw] sm:text-[22vw] md:text-[20vw] lg:text-[18vw] xl:text-[17vw] font-medium leading-[0.85] tracking-[-0.07em]"
           />
         </div>
 
