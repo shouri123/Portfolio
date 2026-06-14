@@ -1,36 +1,160 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shouri Chakraborty | AI Developer & Software Engineer Portfolio
 
-## Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.4-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![GSAP](https://img.shields.io/badge/Animations-GSAP-88CE02?style=for-the-badge&logo=greenock&logoColor=white)](https://gsap.com/)
 
-First, run the development server:
+A premium, highly interactive, and visually stunning developer portfolio built using **Next.js 16 (App Router)**, **React 19**, **TypeScript**, and **Tailwind CSS**. The site leverages advanced **GSAP** timelines, micro-interactions, **Supabase** database integrations, and real-time **GitHub API** stats to deliver a premium agentic developer experience.
+
+---
+
+## 🚀 Key Features
+
+* **Cinematic Visuals & Backgrounds**: Features a noise overlay, glassmorphism UI accents, and a seamless background video loop with GSAP ScrollTrigger parallax.
+* **Advanced GSAP Animations & Interactions**:
+  * **Dynamic Preloader**: Immersive entry animation utilizing custom font scaling.
+  * **Custom Cursor**: Adaptive custom pointer dot.
+  * **Magnetic Effects**: Snappy magnetic cursor attraction on interactive buttons and navigation links.
+  * **Neural Network Canvas**: Real-time rendering of responsive node connections.
+  * **3D Tilt Cards**: Fluid 3D perspective tilting on mouse-over.
+  * **Text Pull-Ups**: Staggered character/word scroll reveals.
+* **Command Palette (Cmd + K / Ctrl + K)**: A keyboard-accessible overlay allowing users to quick-navigate sections, download the resume, toggle theme settings, or jump directly to social platforms.
+* **Live GitHub Stats Integration**:
+  * Real-time contribution tracker, public repo counts, and longest streaks fetched via a custom cached API route `/api/github-stats`.
+  * Customized `react-github-calendar` widget styled with custom theme colors and a patched legend showing current month labels.
+* **Secure Admin Dashboard & Panel (`/admin`)**:
+  * Cookie-based admin authentication.
+  * Live inbox reader to view and manage incoming contact messages from Supabase.
+* **Database & Content Management**:
+  * Integration with **Supabase PostgreSQL** for loading active projects and caching contact form entries.
+  * Built-in DB migration scripts.
+
+---
+
+## 🛠️ Technology Stack
+
+* **Frontend Framework**: Next.js 16 (App Router) & React 19
+* **Styling**: Tailwind CSS v4 & Vanilla CSS variables
+* **Animations**: GSAP (GreenSock Animation Platform) & ScrollTrigger
+* **Smooth Scrolling**: Lenis Scroll Provider
+* **Database & Auth**: Supabase (PostgreSQL client)
+* **API Handling**: Next.js Route Handlers (Edge-ready)
+* **Package Manager**: npm
+
+---
+
+## 📂 Project Structure
+
+```
+├── .agent/                  # GSD agent configuration & workflows
+├── public/                  # Static assets (PDFs, images, videos)
+│   ├── Shouri_Chakraborty_Resume.pdf
+│   ├── developer_portrait.jpg
+│   └── videos/              # Seamless background loop videos
+├── src/
+│   ├── app/                 # Next.js App Router (pages & API endpoints)
+│   │   ├── admin/           # Admin Dashboard & Login page
+│   │   ├── api/             # API routes (contact, github-stats, admin auth)
+│   │   ├── favicon.ico      # Multi-resolution favicon
+│   │   ├── globals.css      # Core theme variables & global styles
+│   │   ├── layout.tsx       # Global layouts, fonts, JSON-LD schema metadata
+│   │   └── page.tsx         # Main portfolio entry
+│   ├── components/          # Reusable UI sections and features
+│   │   ├── animations/      # GSAP motion controls (magnetic, tilt, canvas)
+│   │   ├── AboutSection.tsx
+│   │   ├── AchievementsSection.tsx
+│   │   ├── CommandPalette.tsx
+│   │   ├── GithubContributions.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── Navbar.tsx
+│   │   └── ProjectsShowcase.tsx
+│   ├── lib/                 # Shared utilities (Supabase clients)
+│   └── proxy.ts             # Custom auth/admin middleware proxy
+├── supabase/                # PostgreSQL DB schemas and migrations
+│   └── migrations/          # Tables for contact messages & project seeds
+└── next.config.ts           # Next.js framework configuration
+```
+
+---
+
+## ⚙️ Local Development Setup
+
+### 1. Prerequisites
+
+Ensure you have **Node.js (v18+)** and **npm** installed.
+
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/shouri123/Portfolio.git
+cd Portfolio
+```
+
+### 3. Environment Variables Setup
+
+Create a `.env.local` file in the root directory and configure the following credentials:
+
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Admin Panel Credentials
+ADMIN_PASSWORD=your_secure_admin_password
+JWT_SECRET=your_jwt_signing_key
+
+# Optional: GitHub API Access (prevents API rate-limiting)
+GITHUB_TOKEN=your_github_personal_access_token
+```
+
+### 4. Database Setup (Supabase)
+
+Run the SQL migration scripts located in the `supabase/migrations/` directory inside your Supabase SQL editor:
+* `20260613063809_create_contact_messages_table.sql`: Creates the contact messages table.
+* `20260613063857_create_projects_table_with_seed.sql`: Creates the projects table and seeds initial portfolio items.
+
+### 5. Install Dependencies
+
+```bash
+npm install
+```
+
+### 6. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Building and Deploying
 
-## Learn More
+To create an optimized production build:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This compiles TypeScript, bundles static assets via Next.js Turbopack, and exports static routes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Deploying to Vercel
 
-## Deploy on Vercel
+The easiest way to deploy this portfolio is using Vercel:
+1. Connect your GitHub repository to Vercel.
+2. Configure your Environment Variables in the project settings.
+3. Deploy! Vercel will auto-detect Next.js and apply optimal build settings.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contact & Connections
+
+* **Developer**: Shouri Chakraborty
+* **GitHub**: [@shouri123](https://github.com/shouri123)
+* **LinkedIn**: [shouri-chakraborty](https://linkedin.com/in/shouri-chakraborty)
+* **Instagram**: [@devshouri](https://instagram.com/devshouri)
+* **Website**: [devshouri.in](https://devshouri.in)
