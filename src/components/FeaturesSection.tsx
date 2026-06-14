@@ -54,7 +54,7 @@ export default function FeaturesSection() {
           
           {/* Card 1 - Video Component */}
           <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
-            <div className="w-full h-full rounded-2xl md:rounded-[2rem] overflow-hidden relative group cursor-pointer border border-white/5 bg-[#101010]">
+            <div className="w-full h-full rounded-2xl md:rounded-4xl overflow-hidden relative group cursor-pointer border border-white/5 bg-bg-card">
               <video
                 className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
                 autoPlay
@@ -63,7 +63,7 @@ export default function FeaturesSection() {
                 playsInline
                 src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-6 left-6 right-6">
                 <h3 className="text-[#E1E0CC] text-xl font-medium tracking-tight">Engineering the Future.</h3>
               </div>
@@ -72,20 +72,20 @@ export default function FeaturesSection() {
 
           {/* Card 2 - GenAI & Agentics */}
           <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
-            <div className="w-full h-full bg-[#212121] rounded-2xl md:rounded-[2rem] p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
+            <div className="w-full h-full bg-bg-feature rounded-2xl md:rounded-4xl p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
               <div>
-                <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85" alt="Icon 1" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
-                <h3 className="text-[#DEDBC8] text-xl md:text-2xl font-medium mb-8">GenAI & Agents. <span className="text-gray-600 text-sm align-top ml-1">(01)</span></h3>
+                <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85" alt="GenAI and Agentic AI workflows icon" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
+                <h3 className="text-primary text-xl md:text-2xl font-medium mb-8">GenAI & Agents. <span className="text-gray-600 text-sm align-top ml-1">(01)</span></h3>
                 <ul className="space-y-4">
                   {["LLM Reasoning & RAG", "Coding Agent Systems", "Advanced NLP Modularity", "Prompt Engineering Mastery"].map((item, i) => (
                     <li key={i} className="flex gap-3 items-start">
-                      <Check className="text-[#DEDBC8] shrink-0 w-4 h-4 mt-1" />
+                      <Check className="text-primary shrink-0 w-4 h-4 mt-1" />
                       <span className="text-gray-400 text-sm md:text-sm">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <a href="#" className="flex justify-between items-center text-[#DEDBC8] text-sm md:text-sm font-medium hover:text-white transition-colors uppercase tracking-wide mt-8">
+              <a href="#" className="flex justify-between items-center text-primary text-sm md:text-sm font-medium hover:text-white transition-colors uppercase tracking-wide mt-8">
                 Learn more <ArrowRight className="w-4 h-4 -rotate-45" />
               </a>
             </div>
@@ -94,20 +94,20 @@ export default function FeaturesSection() {
 
           {/* Card 4 - Projects */}
           <Gsap3DTilt className="feature-card h-[400px] md:h-[450px] lg:h-full">
-            <div className="w-full h-full bg-[#212121] rounded-2xl md:rounded-[2rem] p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
+            <div className="w-full h-full bg-bg-feature rounded-2xl md:rounded-4xl p-6 md:p-8 flex flex-col justify-between border border-white/5 hover:bg-[#252525] transition-colors duration-300">
               <div>
-                <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85" alt="Icon 3" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
-                <h3 className="text-[#DEDBC8] text-xl md:text-2xl font-medium mb-8">Recent Projects. <span className="text-gray-600 text-sm align-top ml-1">(02)</span></h3>
+                <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85" alt="AI projects and code repositories icon" className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover mb-12 mix-blend-screen opacity-80" />
+                <h3 className="text-primary text-xl md:text-2xl font-medium mb-8">Recent Projects. <span className="text-gray-600 text-sm align-top ml-1">(02)</span></h3>
                 <ul className="space-y-4">
                   {["Late-Meet (AI Copilot)", "Aven (TypeScript Platform)", "JAVA-Practice Architecture", "House-Prediction-App"].map((item, i) => (
                     <li key={i} className="flex gap-3 items-start">
-                      <Check className="text-[#DEDBC8] shrink-0 w-4 h-4 mt-1" />
+                      <Check className="text-primary shrink-0 w-4 h-4 mt-1" />
                       <span className="text-gray-400 text-sm md:text-sm">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <a href="https://github.com/shouri123" target="_blank" className="flex justify-between items-center text-[#DEDBC8] text-sm md:text-sm font-medium hover:text-white transition-colors uppercase tracking-wide mt-8">
+              <a href="https://github.com/shouri123" target="_blank" className="flex justify-between items-center text-primary text-sm md:text-sm font-medium hover:text-white transition-colors uppercase tracking-wide mt-8">
                 View Github <ArrowRight className="w-4 h-4 -rotate-45" />
               </a>
             </div>

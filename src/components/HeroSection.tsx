@@ -57,7 +57,7 @@ export default function HeroSection() {
 
       {/* Overlays */}
       <div className="noise-overlay" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80 z-10" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/20 via-transparent to-black/80 z-10" />
 
       {/* Global Navbar */}
       <Navbar />
@@ -67,6 +67,7 @@ export default function HeroSection() {
         
         {/* Left Column: Heading */}
         <div className="w-full md:w-8/12">
+          <h1 className="sr-only">Shouri Chakraborty | AI Developer & Software Engineer Portfolio</h1>
           <GsapWordsPullUp 
             text="Shouri" 
             showAsterisk 
@@ -79,8 +80,8 @@ export default function HeroSection() {
           {/* Availability Badge */}
           <div className="hero-fade-up flex items-center gap-2 border border-white/10 bg-white/3 backdrop-blur-md px-3.5 py-1.5 rounded-full w-fit">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff66] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ff66]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span className="text-[9px] sm:text-[10px] tracking-[0.15em] uppercase text-white/80 font-bold">
               Available for Internships & OSS
@@ -113,7 +114,7 @@ export default function HeroSection() {
                 onClick={() => document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' })}
                 className="group bg-primary text-black rounded-full pl-6 pr-2 py-2 flex items-center justify-between gap-8 sm:gap-10 hover:bg-white transition-colors duration-300"
               >
-                <span className="font-medium text-sm sm:text-base">Let's Connect</span>
+                <span className="font-medium text-sm sm:text-base">Let&apos;s Connect</span>
                 <div className="bg-black text-primary rounded-full w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                   <ArrowRight size={18} />
                 </div>
