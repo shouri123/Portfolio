@@ -20,13 +20,13 @@ interface BlogPost {
 const STATIC_BLOG_POSTS: BlogPost[] = [
   {
     id: 1,
-    title: "Building AI Agents with OpenAI SDK",
+    title: "Why Most Vibe-Coded Apps Fail (and How to Build Them Right)",
     excerpt:
-      "A deep dive into constructing personality-driven AI agents with memory, guardrails, and tool-based architecture.",
-    date: "Apr 2026",
-    tag: "AI / Agents",
-    readTime: "5 min read",
-    url: "https://dev.to",
+      "An analysis of the limitations of pure vibe-coding with AI agents, common architectural pitfalls, and how to structure and engineer agent-driven projects for long-term success.",
+    date: "Jun 2026",
+    tag: "AI / Engineering",
+    readTime: "6 min read",
+    url: "https://dev.to/shouri_chakraborty_6ee5dd/why-most-vibe-coded-apps-fail-and-how-to-build-them-right-15ea",
   },
   {
     id: 2,
@@ -61,7 +61,7 @@ export default function BlogSection() {
 
     const fetchBlogs = async () => {
       try {
-        const res = await fetch("https://dev.to/api/articles?username=shouri123", {
+        const res = await fetch("https://dev.to/api/articles?username=shouri_chakraborty_6ee5dd", {
           signal: controller.signal,
         });
         if (!res.ok) throw new Error("Could not fetch DEV.to posts");
