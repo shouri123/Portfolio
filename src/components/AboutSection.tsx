@@ -20,7 +20,7 @@ export default function AboutSection() {
     }
   };
   const headingSegments = [
-    { text: "I am Shouri," },
+    { text: "I am Shouri Chakraborty," },
     { text: "an aspiring developer.", className: "font-serif italic text-white" },
     { text: "I love exploring AI systems and building tools that make computers feel smarter." }
   ];
@@ -35,9 +35,9 @@ export default function AboutSection() {
             Engineering & AI // About
           </h2>
 
-          <div className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-normal leading-[1.1] mb-8 text-primary">
+          <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-normal leading-[1.1] mb-8 text-primary">
             <GsapWordsPullUpMultiStyle segments={headingSegments} />
-          </div>
+          </h3>
 
           <div className="w-full max-w-2xl">
             <GsapScrollRevealChars 

@@ -99,25 +99,25 @@ export default function FooterSection() {
             <a
               href="https://github.com/shouri123"
               target="_blank"
-              rel="noreferrer"
+              rel="me noopener noreferrer"
               className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
               aria-label="GitHub"
             >
               <GithubIcon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
             </a>
             <a
-              href="https://linkedin.com/in/"
+              href="https://www.linkedin.com/in/shouri-chakraborty-224b5330b/"
               target="_blank"
-              rel="noreferrer"
+              rel="me noopener noreferrer"
               className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
               aria-label="LinkedIn"
             >
               <LinkedinIcon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
             </a>
             <a
-              href="https://instagram.com/"
+              href="https://instagram.com/shourichakraborty"
               target="_blank"
-              rel="noreferrer"
+              rel="me noopener noreferrer"
               className="w-12 h-12 rounded-full border border-white/10 bg-white/3 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 hover:bg-white/6 transition-all duration-300 group"
               aria-label="Instagram"
             >
@@ -137,13 +137,13 @@ export default function FooterSection() {
             <a href="mailto:chakrabortyshouri@gmail.com" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
               Email <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
-            <a href="https://github.com/shouri123" target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+            <a href="https://github.com/shouri123" target="_blank" rel="me noopener noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
               Github <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
-            <a href="https://linkedin.com/in/" target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+            <a href="https://www.linkedin.com/in/shouri-chakraborty-224b5330b/" target="_blank" rel="me noopener noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
               LinkedIn <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
-            <a href="https://instagram.com/" target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
+            <a href="https://instagram.com/shourichakraborty" target="_blank" rel="me noopener noreferrer" className="hover:text-white flex items-center gap-1 group transition-colors duration-300">
               Instagram <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
           </div>

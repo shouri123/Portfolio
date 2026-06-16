@@ -10,9 +10,10 @@ interface GsapWordsPullUpProps {
   text: string;
   className?: string;
   showAsterisk?: boolean;
+  as?: "div" | "h1" | "h2" | "h3" | "span";
 }
 
-export default function GsapWordsPullUp({ text, className = "", showAsterisk = false }: GsapWordsPullUpProps) {
+export default function GsapWordsPullUp({ text, className = "", showAsterisk = false, as: Tag = "div" }: GsapWordsPullUpProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const words = text.split(" ");
@@ -40,10 +41,12 @@ export default function GsapWordsPullUp({ text, className = "", showAsterisk = f
     return () => ctx.revert();
   }, [text]);
 
+  const Component = Tag as any;
+
   return (
-    <div ref={containerRef} className={`flex flex-wrap ${className}`}>
+    <Component ref={containerRef} className={`flex flex-wrap ${className}`}>
       {words.map((word, i) => (
-        <div key={i} className="overflow-hidden inline-block mr-[0.25em] py-[0.15em] -my-[0.15em]">
+        <span key={i} className="overflow-hidden inline-block mr-[0.25em] py-[0.15em] -my-[0.15em]">
           <span className="word-inner inline-block relative">
             {word}
             {showAsterisk && i === words.length - 1 && (
@@ -52,8 +55,8 @@ export default function GsapWordsPullUp({ text, className = "", showAsterisk = f
               </span>
             )}
           </span>
-        </div>
+        </span>
       ))}
-    </div>
+    </Component>
   );
 }

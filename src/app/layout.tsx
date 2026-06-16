@@ -20,6 +20,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://devshouri.in"),
   title: "Shouri Chakraborty | AI Developer & Software Engineer",
   description: "Explore the portfolio of Shouri Chakraborty, an aspiring developer and AI engineer in Kolkata specializing in Generative AI, coding agents, NLP, and Next.js.",
   keywords: [
@@ -42,6 +43,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/developer_portrait.jpg",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -49,11 +55,20 @@ export const metadata: Metadata = {
     title: "Shouri Chakraborty | AI Developer & Software Engineer",
     description: "Explore the portfolio of Shouri Chakraborty, an aspiring developer and AI engineer in Kolkata specializing in Generative AI, coding agents, NLP, and Next.js.",
     siteName: "Shouri Chakraborty Portfolio",
+    images: [
+      {
+        url: "/developer_portrait.jpg",
+        width: 800,
+        height: 800,
+        alt: "Shouri Chakraborty portrait",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Shouri Chakraborty | AI Developer & Software Engineer",
     description: "Explore the portfolio of Shouri Chakraborty, an aspiring developer and AI engineer in Kolkata specializing in Generative AI, coding agents, NLP, and Next.js.",
+    images: ["/developer_portrait.jpg"],
   },
 };
 
@@ -66,8 +81,10 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Shouri Chakraborty",
+    "alternateName": ["Shouri", "devshouri", "Shouri Chakraborty Portfolio", "shouri123"],
     "url": "https://devshouri.in",
     "image": "https://devshouri.in/developer_portrait.jpg",
+    "email": "chakrabortyshouri@gmail.com",
     "jobTitle": "AI Developer & Software Engineer",
     "alumniOf": {
       "@type": "EducationalOrganization",
@@ -75,8 +92,8 @@ export default function RootLayout({
     },
     "sameAs": [
       "https://github.com/shouri123",
-      "https://linkedin.com/in/shouri-chakraborty",
-      "https://instagram.com/devshouri"
+      "https://www.linkedin.com/in/shouri-chakraborty-224b5330b/",
+      "https://instagram.com/shourichakraborty"
     ],
     "knowsAbout": [
       "Generative AI",
@@ -95,6 +112,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Shouri Chakraborty | AI Developer & Software Engineer",
+    "alternateName": "Shouri Portfolio",
     "url": "https://devshouri.in",
     "description": "Professional developer portfolio of Shouri Chakraborty, specializing in Next.js, Generative AI, and Agentic systems."
   };

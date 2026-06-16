@@ -91,11 +91,13 @@ export default function HeroSection() {
         
         {/* Left Column: Heading */}
         <div className="w-full md:w-8/12">
-          <h1 className="sr-only">Shouri Chakraborty | AI Developer & Software Engineer Portfolio</h1>
-          <GsapWordsPullUp 
-            text="Shouri" 
-            className="text-[#E1E0CC] text-[24vw] sm:text-[22vw] md:text-[20vw] lg:text-[18vw] xl:text-[17vw] font-medium leading-[0.85] tracking-[-0.07em]"
-          />
+          <h1 className="text-[#E1E0CC] text-[24vw] sm:text-[22vw] md:text-[20vw] lg:text-[18vw] xl:text-[17vw] font-medium leading-[0.85] tracking-[-0.07em]">
+            <span className="sr-only">Shouri Chakraborty | AI Developer & Software Engineer Portfolio</span>
+            <GsapWordsPullUp 
+              as="span"
+              text="Shouri" 
+            />
+          </h1>
         </div>
 
         {/* Right Column: Description & CTA */}
