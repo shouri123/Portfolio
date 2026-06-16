@@ -5,6 +5,7 @@ import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CommandPalette from "@/components/CommandPalette";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const almarai = Almarai({
   subsets: ["latin"],
@@ -153,6 +154,7 @@ export default function RootLayout({
           {children}
         </LenisProvider>
         <SpeedInsights />
+        <Analytics />
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-HC19S895RB"
