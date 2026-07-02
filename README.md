@@ -9,20 +9,24 @@
 
 A premium, highly interactive, and visually stunning developer portfolio built using **Next.js 16 (App Router)**, **React 19**, **TypeScript**, and **Tailwind CSS**. The site leverages advanced **GSAP** timelines, micro-interactions, **Supabase** database integrations, and real-time **GitHub API** stats to deliver a premium agentic developer experience.
 
+## 🆕 What's New: World Cup 2026 Season Update (FIFA Mode) ⚽
+
+To celebrate the **FIFA World Cup 2026**, the portfolio features a limited-edition **World Cup Mode** toggleable from the navigation bar. When active, it transforms the developer portfolio into an interactive sports career experience:
+
+* **Interactive Ultimate Card**: A 3D mouse-tracked card displaying Shouri's developer attributes (PAC, PAS, SHO, DEF, DRI, PHY). Clicking attributes opens verified GitHub proof drawer widgets.
+* **Dream XI Tactical Roster**: A top-down football pitch allowing visitors to draft and position projects into formations (e.g., 4-3-3, 3-5-2) to build their ideal startup stack.
+* **Gold Pack Loot Chest**: Open simulated card packs with epic walkout spotlight animations to discover special developer projects.
+* **Goalie AI Penalty Shootout**: Submitting a contact form is locked behind a minigame. Visitors must score 3 goals against a custom goalkeeper AI.
+* **VAR Review Checker**: Clicking projects launches a Video Assistant Referee animation sequence to verify code credentials.
+* **Interactive Soundtrack**: Ambient looping of the World Cup theme song (`dai_dai.mp3`) with browser-autoplay-safe preloader suppression.
+* **Premium Glassmorphism Design**: High-fidelity dark glassmorphic panels, glowing neon highlights, and custom `soccer_ball.png` graphics replacing basic emojis.
+
 ---
 
 ## 🚀 Key Features
 
 * **Cinematic Visuals & Backgrounds**: Features a noise overlay, glassmorphism UI accents, and a seamless background video loop with GSAP ScrollTrigger parallax.
-* **🏆 World Cup 2026 Mode (Limited Time FIFA Special)**:
-  An exclusive seasonal event toggleable from the navigation bar. Shifts the entire portfolio into a stadium pitch layout with full gamification:
-  * **Interactive Ultimate Card**: 3D mouse-tracked card displaying Shouri's custom skill scores (Learning Speed, Collaboration, UI Creativity, etc.) and revealing GitHub evidence drawers.
-  * **Dream XI Squad Builder**: Pitch layout allowing visitors to drag/select projects into active tactical formations (4-3-3, 3-5-2, 4-2-3-1).
-  * **Gold Pack Openings**: Loot-pack reveal sequence with animated flares, spotlights, and "walkout player" details for projects.
-  * **VAR (Video Assistant Referee) Checker**: Custom VAR review sequence validating each selected project check.
-  * **Transfer Market Portal**: Roster negotiation board supporting custom internship contract bids.
-  * **Stadium commentary & Interactive Soundtracks**: Native playback of the World Cup theme song (`dai_dai.mp3` in loops) and rolling live ticker logs.
-  * **Goalie AI Penalty Shootout**: Submitting a contact inquiry is locked behind scoring 3 goals on the canvas shootout goalie.
+* **🏆 World Cup 2026 Mode**: Complete stadium-themed gamified interface with 3D FUT Cards, tactical squad builder, and interactive minigames.
 * **Advanced GSAP Animations & Interactions**:
   * **Dynamic Preloader**: Immersive entry animation utilizing custom font scaling.
   * **Custom Cursor**: Adaptive custom pointer dot.
