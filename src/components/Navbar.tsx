@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import GsapMagnetic from './animations/GsapMagnetic';
-import { ChevronDown, Download } from 'lucide-react';
+import { ChevronDown, Download, Sun, Trophy } from 'lucide-react';
+import { useFootballMode } from '@/lib/context/FootballModeContext';
 
 export default function Navbar() {
+  const { isFootballMode, toggleMode } = useFootballMode();
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
@@ -105,8 +107,10 @@ export default function Navbar() {
                   <span className="relative z-10">{link.name}</span>
                   {/* Underline Indicator */}
                   <span
-                    className={`absolute bottom-1 left-2.5 right-2.5 h-[2px] bg-primary transition-transform duration-300 ease-out origin-left ${
-                      isActive ? 'scale-x-100 shadow-[0_0_8px_#DEDBC8]' : 'scale-x-0 group-hover:scale-x-100'
+                    className={`absolute bottom-1 left-2.5 right-2.5 h-[2px] ${
+                      isFootballMode ? 'bg-[#FFD700] shadow-[0_0_8px_#FFD700]' : 'bg-primary shadow-[0_0_8px_#DEDBC8]'
+                    } transition-transform duration-300 ease-out origin-left ${
+                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                     }`}
                   />
                 </a>
@@ -115,6 +119,30 @@ export default function Navbar() {
           })}
         </div>
 
+        {/* Mode Toggle Button */}
+        <GsapMagnetic strength={10}>
+          <button
+            onClick={toggleMode}
+            className={`text-[10px] sm:text-xs font-bold tracking-widest uppercase border transition-all duration-300 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,255,255,0.02)] cursor-pointer ${
+              isFootballMode
+                ? 'bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 hover:bg-[#FFD700] hover:text-black'
+                : 'bg-white/3 text-white/60 border-white/10 hover:text-white hover:border-white/20'
+            }`}
+          >
+            {isFootballMode ? (
+              <>
+                <Sun className="w-3 h-3" />
+                <span>Normal Mode</span>
+              </>
+            ) : (
+              <>
+                <Trophy className="w-3 h-3" />
+                <span>Football Mode</span>
+              </>
+            )}
+          </button>
+        </GsapMagnetic>
+
         {/* Resume Dropdown Button */}
         <GsapMagnetic strength={10}>
           <div className="relative group/resume">
@@ -122,7 +150,11 @@ export default function Navbar() {
               href="/Shouri_Chakraborty_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-primary/10 text-primary border border-primary/30 hover:bg-primary hover:text-black transition-all duration-300 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(222,219,200,0.05)]"
+              className={`text-[10px] sm:text-xs font-bold tracking-widest uppercase border transition-all duration-300 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(222,219,200,0.05)] ${
+                isFootballMode
+                  ? 'bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 hover:bg-[#FFD700] hover:text-black'
+                  : 'bg-primary/10 text-primary border-primary/30 hover:bg-primary hover:text-black'
+              }`}
             >
               <Download className="w-3 h-3" />
               <span>Resume</span>
@@ -139,7 +171,9 @@ export default function Navbar() {
                 className="flex items-center justify-between px-4 py-2.5 text-[11px] uppercase tracking-wider text-gray-300 hover:text-white hover:bg-white/5 transition-all"
               >
                 <span>Download (PDF)</span>
-                <span className="text-[8px] text-primary border border-primary/30 px-1 py-0.5 rounded">CLEAN</span>
+                <span className={`text-[8px] border px-1 py-0.5 rounded ${
+                  isFootballMode ? 'text-[#FFD700] border-[#FFD700]/30' : 'text-primary border-primary/30'
+                }`}>CLEAN</span>
               </a>
               <a
                 href="https://github.com/shouri123"

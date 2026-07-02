@@ -5,6 +5,8 @@ import gsap from 'gsap';
 const gsapCore = gsap;
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X, ArrowUpRight, Star, GitFork, AlertCircle, Play } from 'lucide-react';
+import { useFootballMode } from '@/lib/context/FootballModeContext';
+import VarReplay from '@/components/football/VarReplay';
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -32,6 +34,8 @@ interface Project {
 }
 
 export default function ProjectsShowcase({ projects }: { projects: Project[] }) {
+  const { isFootballMode } = useFootballMode();
+  const [varProject, setVarProject] = useState<Project | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [iframeLoading, setIframeLoading] = useState(true);
@@ -130,7 +134,11 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
   }, [selectedProject]);
 
   const openProject = (project: Project) => {
-    setSelectedProject(project);
+    if (isFootballMode) {
+      setVarProject(project);
+    } else {
+      setSelectedProject(project);
+    }
   };
 
   const closeProject = () => {
@@ -479,6 +487,16 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
             </div>
           </div>
         </div>
+      )}
+      {varProject && (
+        <VarReplay
+          projectName={varProject.title}
+          starsCount={varProject.stars ?? 8}
+          onComplete={() => {
+            setSelectedProject(varProject);
+            setVarProject(null);
+          }}
+        />
       )}
     </>
   );
