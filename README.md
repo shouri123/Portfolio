@@ -14,6 +14,11 @@ A premium, highly interactive, and visually stunning developer portfolio built u
 ## 🚀 Key Features
 
 * **Cinematic Visuals & Backgrounds**: Features a noise overlay, glassmorphism UI accents, and a seamless background video loop with GSAP ScrollTrigger parallax.
+* **Premium Football/FIFA Mode ⚽**:
+  * A full aesthetic and interactive overhaul toggleable from the navigation bar.
+  * Replaces standard components with cinematic FUT cards, a tactical pitch squad builder (`DreamXI`), and interactive pack opening minigames.
+  * Custom `dai_dai.mp3` theme music triggers natively during transition.
+  * Hidden contact form unlockable by defeating an AI Goalkeeper in a penalty shootout.
 * **Advanced GSAP Animations & Interactions**:
   * **Dynamic Preloader**: Immersive entry animation utilizing custom font scaling.
   * **Custom Cursor**: Adaptive custom pointer dot.
@@ -64,6 +69,7 @@ A premium, highly interactive, and visually stunning developer portfolio built u
 │   │   └── page.tsx         # Main portfolio entry
 │   ├── components/          # Reusable UI sections and features
 │   │   ├── animations/      # GSAP motion controls (magnetic, tilt, canvas)
+│   │   ├── football/        # FIFA mode components (DreamXI, TransferMarket, FUT Card)
 │   │   ├── AboutSection.tsx
 │   │   ├── AchievementsSection.tsx
 │   │   ├── CommandPalette.tsx
@@ -71,7 +77,7 @@ A premium, highly interactive, and visually stunning developer portfolio built u
 │   │   ├── HeroSection.tsx
 │   │   ├── Navbar.tsx
 │   │   └── ProjectsShowcase.tsx
-│   ├── lib/                 # Shared utilities (Supabase clients)
+│   ├── lib/                 # Shared utilities (Supabase clients, Contexts)
 │   └── proxy.ts             # Custom auth/admin middleware proxy
 ├── supabase/                # PostgreSQL DB schemas and migrations
 │   └── migrations/          # Tables for contact messages & project seeds
