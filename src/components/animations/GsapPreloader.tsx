@@ -140,10 +140,10 @@ export default function GsapPreloader({ onComplete }: { onComplete: () => void }
           {/* Center Main Heading & Details */}
           <section className="relative z-10 flex flex-col items-center justify-center text-center px-5 sm:px-8 max-w-4xl mx-auto my-auto gap-8">
             <h2 className="text-white text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.08] tracking-tight flex flex-col items-center uppercase select-none">
-              <span className="block overflow-hidden font-preloader-sans font-light">
+              <span className="block overflow-hidden font-preloader-sans font-light px-4">
                 <StaggeredFade text="SHOURI" delayOffset={0.2} />
               </span>
-              <span className="block overflow-hidden font-preloader-serif font-normal text-primary">
+              <span className="block overflow-hidden font-preloader-serif font-normal text-primary px-6">
                 <StaggeredFade text="CHAKRABORTY" delayOffset={0.5} />
               </span>
             </h2>
