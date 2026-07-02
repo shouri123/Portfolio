@@ -1,147 +1,182 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import gsap from 'gsap';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 
-const PRELOADER_LOGS = [
-  { text: 'SYSTEM: Initializing portfolio core...', delay: 0.2 },
-  { text: 'NETWORK: Resolving GitHub credentials for shouri123...', delay: 0.6 },
-  { text: 'DATABASE: Connecting to Supabase serverless client...', delay: 1.0 },
-  { text: 'SOCKET: Listening on real-time pg_changes channels...', delay: 1.4 },
-  { text: 'METRICS: Compiling PR counts (273+ reviewed) and 18 repositories...', delay: 1.8 },
-  { text: 'ASSETS: Loading video parallax loops from motionsites.ai...', delay: 2.2 },
-  { text: 'GSAP: Compiling timeline animations at 60fps...', delay: 2.6 },
-  { text: 'STATUS: Shouri Chakraborty portfolio is ready.', delay: 3.0 },
-];
+// Global styles for the cinematic preloader
+const CinematicStyles = () => (
+  <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&display=swap');
+    
+    .font-preloader-serif {
+      font-family: var(--font-instrument), serif;
+      font-style: italic;
+    }
 
-export default function GsapPreloader({ onComplete }: { onComplete: () => void }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [visibleLogs, setVisibleLogs] = useState<string[]>([]);
-  const [progress, setProgress] = useState(0);
+    .font-preloader-sans {
+      font-family: var(--font-almarai), sans-serif;
+    }
 
-  useEffect(() => {
-    // 1. Simulate progress counter
-    const progressCtx = gsap.context(() => {
-      const obj = { value: 0 };
-      gsap.to(obj, {
-        value: 100,
-        duration: 3.5,
-        ease: 'power1.inOut',
-        onUpdate: () => setProgress(Math.floor(obj.value)),
-      });
-    });
+    /* Liquid Glass Button */
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.01);
+      background-blend-mode: luminosity;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: none;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-    // 2. Schedule logs printing
-    const timers: NodeJS.Timeout[] = [];
-    PRELOADER_LOGS.forEach((log) => {
-      const timer = setTimeout(() => {
-        setVisibleLogs((prev) => [...prev, log.text]);
-        if (terminalRef.current) {
-          // Keep scrolling to the bottom
-          terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-        }
-      }, log.delay * 1000);
-      timers.push(timer);
-    });
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg,
+        rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%,
+        rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+        rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
 
-    // 3. Fade out timeline
-    const fadeCtx = gsap.context(() => {
-      const tl = gsap.timeline({
-        delay: 3.8,
-        onComplete: () => {
-          onComplete();
-        },
-      });
+    .liquid-glass:hover {
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
+    }
 
-      tl.to(containerRef.current, {
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power2.inOut',
-      });
-    });
+    .liquid-glass:active {
+      transform: scale(0.98);
+    }
+  `}</style>
+);
 
-    return () => {
-      progressCtx.revert();
-      fadeCtx.revert();
-      timers.forEach(clearTimeout);
-    };
-  }, [onComplete]);
+const StaggeredFade = ({ text, delayOffset = 0 }: { text: string; delayOffset?: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
+  const characters = Array.from(text);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[#050505] text-primary font-mono select-none px-6"
-    >
-      {/* Video Background Loop - Layered underneath */}
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-screen pointer-events-none"
-      >
-        <source src="/preloader-bg.mp4" type="video/mp4" />
-        {/* Fallback gradient if video fails */}
-        <div className="absolute inset-0 bg-linear-to-tr from-[#110022] via-[#050505] to-[#221e1a]" />
-      </video>
+    <span ref={ref} className="inline-block">
+      {characters.map((char, index) => {
+        const displayChar = char === ' ' ? '\u00A0' : char;
+        return (
+          <motion.span
+            key={index}
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{
+              duration: 0.8,
+              delay: delayOffset + index * 0.05,
+              ease: [0.2, 0.65, 0.3, 0.9],
+            }}
+            className="inline-block"
+          >
+            {displayChar}
+          </motion.span>
+        );
+      })}
+    </span>
+  );
+};
 
-      {/* Futuristic Scanline Overlay */}
-      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-size-[100%_4px]" />
+export default function GsapPreloader({ onComplete }: { onComplete: () => void }) {
+  const [isExiting, setIsExiting] = useState(false);
 
-      <div className="w-full max-w-[800px] bg-black/60 backdrop-blur-md border border-primary/20 p-6 rounded-lg shadow-[0_0_40px_rgba(222,219,200,0.15)] relative">
-        {/* Terminal Header */}
-        <div className="flex items-center justify-between border-b border-primary/20 pb-3 mb-4">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-red-500/80" />
-            <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <span className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="text-xs text-primary/60 ml-2">devshouri.in // boot_sequence.sh</span>
-          </div>
-          <span className="text-xs text-primary/40">v2.1.0</span>
-        </div>
+  const handleBegin = () => {
+    setIsExiting(true);
+    // Let the exit animation finish before calling onComplete
+    setTimeout(() => {
+      onComplete();
+    }, 800);
+  };
 
-        {/* Console Logs */}
-        <div
-          ref={terminalRef}
-          className="h-[250px] overflow-y-auto pr-2 flex flex-col gap-2 text-sm leading-relaxed scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent"
+  return (
+    <AnimatePresence>
+      {!isExiting && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 z-[9999] w-full h-screen overflow-hidden bg-[#010101] text-white flex flex-col justify-between"
         >
-          {visibleLogs.map((log, index) => (
-            <div key={index} className="flex items-start gap-2">
-              <span className="text-primary/40">{`>`}</span>
-              <span>{log}</span>
-            </div>
-          ))}
-          <div className="flex items-center gap-1">
-            <span className="text-primary/40">{`>`}</span>
-            <span className="w-2 h-4 bg-primary animate-pulse" />
-          </div>
-        </div>
+          <CinematicStyles />
 
-        {/* Progress & Stats Footer */}
-        <div className="mt-6 pt-4 border-t border-primary/20 flex items-center justify-between">
-          <div className="flex items-center gap-4 w-full mr-6">
-            <span className="text-xs text-primary/60 min-w-[32px]">{progress}%</span>
-            <div className="w-full h-1.5 bg-primary/10 rounded-full overflow-hidden border border-primary/20">
-              <div
-                className="h-full bg-primary transition-all duration-75 ease-out shadow-[0_0_8px_#DEDBC8]"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+          {/* Background Video */}
+          <div className="absolute inset-0 z-0 w-full h-full">
+            <video
+              className="w-full h-full object-cover object-center"
+              autoPlay
+              muted
+              loop
+              playsInline
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
+            />
+            {/* Dark overlay for readability */}
+            <div className="absolute inset-0 bg-black/45" />
           </div>
-          <span className="text-xs text-primary/60 uppercase tracking-widest min-w-[90px] text-right">
-            {progress === 100 ? 'READY' : 'COMPILING'}
-          </span>
-        </div>
-      </div>
 
-      {/* Decorative Matrix Watermark */}
-      <div className="absolute bottom-6 right-6 text-[10px] text-primary/20 flex flex-col items-end pointer-events-none select-none font-sans">
-        <span>LATENCY: 12ms</span>
-        <span>SHOURI CHAKRABORTY // PORTFOLIO ELEVATION</span>
-      </div>
-    </div>
+          {/* Brand header */}
+          <header className="relative z-20 flex w-full items-center justify-between px-6 py-6 md:py-10">
+            <div>
+              <h1 className="uppercase font-light tracking-[0.25em] text-white text-xs md:text-sm">
+                Dev Career FC // 2026
+              </h1>
+            </div>
+            <div>
+              <span className="text-[10px] tracking-widest text-white/50 uppercase">
+                System Boot Sequence
+              </span>
+            </div>
+          </header>
+
+          {/* Center Main Heading & Details */}
+          <section className="relative z-10 flex flex-col items-center justify-center text-center px-5 sm:px-8 max-w-4xl mx-auto my-auto gap-8">
+            <h2 className="text-white text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.08] tracking-tight flex flex-col items-center uppercase select-none">
+              <span className="block overflow-hidden font-preloader-sans font-light">
+                <StaggeredFade text="SHOURI" delayOffset={0.2} />
+              </span>
+              <span className="block overflow-hidden font-preloader-serif font-normal text-primary">
+                <StaggeredFade text="CHAKRABORTY" delayOffset={0.5} />
+              </span>
+            </h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.4, ease: [0.2, 0.65, 0.3, 0.9] }}
+              className="text-white/70 font-light leading-relaxed max-w-md text-xs sm:text-sm md:text-base font-preloader-sans"
+            >
+              An odyssey through generative AI, agentic systems,
+              <br className="hidden sm:block" />
+              and modern interfaces, driven by curiosity and build-first design.
+            </motion.p>
+
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.8, ease: [0.2, 0.65, 0.3, 0.9] }}
+              onClick={handleBegin}
+              className="liquid-glass rounded-full px-7 sm:px-10 py-3.5 sm:py-4 text-white/90 uppercase tracking-[0.18em] text-[10px] sm:text-xs font-medium mt-4 cursor-pointer"
+            >
+              Begin the Experience
+            </motion.button>
+          </section>
+
+          {/* Footer watermark */}
+          <footer className="relative z-20 w-full px-6 py-6 flex items-center justify-between text-[10px] text-white/40 uppercase tracking-widest">
+            <span>© 2026 SHOURI</span>
+            <span>engineered for the future</span>
+          </footer>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
