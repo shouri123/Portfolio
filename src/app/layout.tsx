@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CommandPalette from "@/components/CommandPalette";
+import { FootballModeProvider } from "@/lib/context/FootballModeContext";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -149,10 +150,12 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <LenisProvider>
-          <CommandPalette />
-          {children}
-        </LenisProvider>
+        <FootballModeProvider>
+          <LenisProvider>
+            <CommandPalette />
+            {children}
+          </LenisProvider>
+        </FootballModeProvider>
         <SpeedInsights />
         <Analytics />
         {/* Google Analytics */}
