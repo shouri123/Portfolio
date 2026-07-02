@@ -14,11 +14,15 @@ A premium, highly interactive, and visually stunning developer portfolio built u
 ## 🚀 Key Features
 
 * **Cinematic Visuals & Backgrounds**: Features a noise overlay, glassmorphism UI accents, and a seamless background video loop with GSAP ScrollTrigger parallax.
-* **Premium Football/FIFA Mode ⚽**:
-  * A full aesthetic and interactive overhaul toggleable from the navigation bar.
-  * Replaces standard components with cinematic FUT cards, a tactical pitch squad builder (`DreamXI`), and interactive pack opening minigames.
-  * Custom `dai_dai.mp3` theme music triggers natively during transition.
-  * Hidden contact form unlockable by defeating an AI Goalkeeper in a penalty shootout.
+* **🏆 World Cup 2026 Mode (Limited Time FIFA Special)**:
+  An exclusive seasonal event toggleable from the navigation bar. Shifts the entire portfolio into a stadium pitch layout with full gamification:
+  * **Interactive Ultimate Card**: 3D mouse-tracked card displaying Shouri's custom skill scores (Learning Speed, Collaboration, UI Creativity, etc.) and revealing GitHub evidence drawers.
+  * **Dream XI Squad Builder**: Pitch layout allowing visitors to drag/select projects into active tactical formations (4-3-3, 3-5-2, 4-2-3-1).
+  * **Gold Pack Openings**: Loot-pack reveal sequence with animated flares, spotlights, and "walkout player" details for projects.
+  * **VAR (Video Assistant Referee) Checker**: Custom VAR review sequence validating each selected project check.
+  * **Transfer Market Portal**: Roster negotiation board supporting custom internship contract bids.
+  * **Stadium commentary & Interactive Soundtracks**: Native playback of the World Cup theme song (`dai_dai.mp3` in loops) and rolling live ticker logs.
+  * **Goalie AI Penalty Shootout**: Submitting a contact inquiry is locked behind scoring 3 goals on the canvas shootout goalie.
 * **Advanced GSAP Animations & Interactions**:
   * **Dynamic Preloader**: Immersive entry animation utilizing custom font scaling.
   * **Custom Cursor**: Adaptive custom pointer dot.
