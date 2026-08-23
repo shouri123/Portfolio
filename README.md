@@ -7,54 +7,44 @@
 [![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 [![GSAP](https://img.shields.io/badge/Animations-GSAP-88CE02?style=for-the-badge&logo=greenock&logoColor=white)](https://gsap.com/)
 
-A premium, highly interactive, and visually stunning developer portfolio built using **Next.js 16 (App Router)**, **React 19**, **TypeScript**, and **Tailwind CSS**. The site leverages advanced **GSAP** timelines, micro-interactions, **Supabase** database integrations, and real-time **GitHub API** stats to deliver a premium agentic developer experience.
-
-## 🆕 What's New: World Cup 2026 Season Update (FIFA Mode) ⚽
-
-To celebrate the **FIFA World Cup 2026**, the portfolio features a limited-edition **World Cup Mode** toggleable from the navigation bar. When active, it transforms the developer portfolio into an interactive sports career experience:
-
-* **Interactive Ultimate Card**: A 3D mouse-tracked card displaying Shouri's developer attributes (PAC, PAS, SHO, DEF, DRI, PHY). Clicking attributes opens verified GitHub proof drawer widgets.
-* **Dream XI Tactical Roster**: A top-down football pitch allowing visitors to draft and position projects into formations (e.g., 4-3-3, 3-5-2) to build their ideal startup stack.
-* **Gold Pack Loot Chest**: Open simulated card packs with epic walkout spotlight animations to discover special developer projects.
-* **Goalie AI Penalty Shootout**: Submitting a contact form is locked behind a minigame. Visitors must score 3 goals against a custom goalkeeper AI.
-* **VAR Review Checker**: Clicking projects launches a Video Assistant Referee animation sequence to verify code credentials.
-* **Interactive Soundtrack**: Ambient looping of the World Cup theme song (`dai_dai.mp3`) with browser-autoplay-safe preloader suppression.
-* **Premium Glassmorphism Design**: High-fidelity dark glassmorphic panels, glowing neon highlights, and custom `soccer_ball.png` graphics replacing basic emojis.
+A premium, highly interactive, and visually stunning developer portfolio and digital presence OS built using **Next.js 16 (App Router)**, **React 19**, **TypeScript**, and **Tailwind CSS**. The site leverages advanced **GSAP** timelines, micro-interactions, **Supabase PostgreSQL** database integrations, an interactive **Command Center Admin OS**, and real-time **GitHub API** stats to deliver an agentic, cinematic developer experience.
 
 ---
 
 ## 🚀 Key Features
 
-* **Cinematic Visuals & Backgrounds**: Features a noise overlay, glassmorphism UI accents, and a seamless background video loop with GSAP ScrollTrigger parallax.
-* **🏆 World Cup 2026 Mode**: Complete stadium-themed gamified interface with 3D FUT Cards, tactical squad builder, and interactive minigames.
+* **Cinematic Visuals & Backgrounds**: Features a noise overlay, glassmorphism UI accents, and seamless background video loops with GSAP ScrollTrigger parallax.
 * **Advanced GSAP Animations & Interactions**:
   * **Dynamic Preloader**: Immersive entry animation utilizing custom font scaling.
-  * **Custom Cursor**: Adaptive custom pointer dot.
-  * **Magnetic Effects**: Snappy magnetic cursor attraction on interactive buttons and navigation links.
+  * **Custom Cursor & Magnetic Effects**: Snappy magnetic cursor attraction on interactive buttons and navigation links.
   * **Neural Network Canvas**: Real-time rendering of responsive node connections.
   * **3D Tilt Cards**: Fluid 3D perspective tilting on mouse-over.
-  * **Text Pull-Ups**: Staggered character/word scroll reveals.
-* **Command Palette (Cmd + K / Ctrl + K)**: A keyboard-accessible overlay allowing users to quick-navigate sections, download the resume, toggle theme settings, or jump directly to social platforms.
-* **Live GitHub Stats Integration**:
-  * Real-time contribution tracker, public repo counts, and longest streaks fetched via a custom cached API route `/api/github-stats`.
-  * Customized `react-github-calendar` widget styled with custom theme colors and a patched legend showing current month labels.
-* **Secure Admin Dashboard & Panel (`/admin`)**:
-  * Cookie-based admin authentication.
-  * Live inbox reader to view and manage incoming contact messages from Supabase.
-* **Database & Content Management**:
-  * Integration with **Supabase PostgreSQL** for loading active projects and caching contact form entries.
-  * Built-in DB migration scripts.
+  * **Staggered Text Pull-Ups**: Fluid character/word scroll reveals.
+* **Command Palette (Cmd + K / Ctrl + K)**: A keyboard-accessible overlay allowing users to quick-navigate sections, download the resume, copy contacts, or jump directly to projects.
+* **Live GitHub Telemetry & Stats**:
+  * Real-time contribution tracker, public repository count, stars, and longest streaks fetched via custom cached API routes.
+  * Customized `react-github-calendar` widget styled with custom theme colors and current month indicators.
+* **Digital OS Command Center Dashboard (`/admin`)**:
+  * Cookie-based admin authentication session management.
+  * **Portfolio CMS**: Create, edit, and toggle active portfolio projects.
+  * **GitHub Repos Browser**: One-click import of public repositories from `@shouri123` into the portfolio showcase.
+  * **Inbound Opportunity CRM**: Real-time reader and status manager for incoming contact submissions.
+  * **Developer CLI Console**: Interactive BASH-style terminal to query system metrics, trigger syncs, and audit telemetry.
+* **Automated Supabase Health & Telemetry Pipeline**:
+  * Scheduled daily health maintenance (via Vercel Cron & GitHub Actions) keeping the database active and monitoring query latency.
+  * Real-time operational status displayed directly in the developer dashboard.
 
 ---
 
 ## 🛠️ Technology Stack
 
 * **Frontend Framework**: Next.js 16 (App Router) & React 19
-* **Styling**: Tailwind CSS v4 & Vanilla CSS variables
-* **Animations**: GSAP (GreenSock Animation Platform) & ScrollTrigger
-* **Smooth Scrolling**: Lenis Scroll Provider
+* **Styling**: Tailwind CSS v4 & Vanilla CSS custom properties
+* **Motion & Animations**: GSAP (GreenSock Animation Platform) & ScrollTrigger
+* **Smooth Scrolling**: Lenis Smooth Scroll Provider
 * **Database & Auth**: Supabase (PostgreSQL client)
-* **API Handling**: Next.js Route Handlers (Edge-ready)
+* **Automation & Cron**: Vercel Cron & GitHub Actions
+* **API Handling**: Next.js Route Handlers (Edge & Node.js runtimes)
 * **Package Manager**: npm
 
 ---
@@ -63,32 +53,38 @@ To celebrate the **FIFA World Cup 2026**, the portfolio features a limited-editi
 
 ```
 ├── .agent/                  # GSD agent configuration & workflows
+├── .github/                 # GitHub Actions workflows (health checks, CI)
+│   └── workflows/
+│       └── health-check.yml
 ├── public/                  # Static assets (PDFs, images, videos)
 │   ├── Shouri_Chakraborty_Resume.pdf
 │   ├── developer_portrait.jpg
 │   └── videos/              # Seamless background loop videos
 ├── src/
 │   ├── app/                 # Next.js App Router (pages & API endpoints)
-│   │   ├── admin/           # Admin Dashboard & Login page
-│   │   ├── api/             # API routes (contact, github-stats, admin auth)
+│   │   ├── admin/           # Command Center Dashboard & Login
+│   │   ├── api/             # API routes (contact, cron/health, github-stats, admin CMS)
 │   │   ├── favicon.ico      # Multi-resolution favicon
 │   │   ├── globals.css      # Core theme variables & global styles
 │   │   ├── layout.tsx       # Global layouts, fonts, JSON-LD schema metadata
 │   │   └── page.tsx         # Main portfolio entry
 │   ├── components/          # Reusable UI sections and features
 │   │   ├── animations/      # GSAP motion controls (magnetic, tilt, canvas)
-│   │   ├── football/        # FIFA mode components (DreamXI, TransferMarket, FUT Card)
 │   │   ├── AboutSection.tsx
 │   │   ├── AchievementsSection.tsx
+│   │   ├── BlogSection.tsx
 │   │   ├── CommandPalette.tsx
+│   │   ├── FooterSection.tsx
 │   │   ├── GithubContributions.tsx
 │   │   ├── HeroSection.tsx
 │   │   ├── Navbar.tsx
-│   │   └── ProjectsShowcase.tsx
-│   ├── lib/                 # Shared utilities (Supabase clients, Contexts)
+│   │   ├── ProjectsShowcase.tsx
+│   │   └── TechStackSection.tsx
+│   ├── lib/                 # Shared utilities (Supabase client, Security, Command Center store)
 │   └── proxy.ts             # Custom auth/admin middleware proxy
 ├── supabase/                # PostgreSQL DB schemas and migrations
-│   └── migrations/          # Tables for contact messages & project seeds
+│   └── migrations/          # Tables for contact messages, project seeds, & system_health
+├── vercel.json              # Vercel deployment headers & automated cron configuration
 └── next.config.ts           # Next.js framework configuration
 ```
 
@@ -120,6 +116,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ADMIN_PASSWORD=your_secure_admin_password
 JWT_SECRET=your_jwt_signing_key
 
+# Cron Security Secret (for automated health checks)
+CRON_SECRET=your_random_secure_cron_secret
+
 # Optional: GitHub API Access (prevents API rate-limiting)
 GITHUB_TOKEN=your_github_personal_access_token
 ```
@@ -128,7 +127,8 @@ GITHUB_TOKEN=your_github_personal_access_token
 
 Run the SQL migration scripts located in the `supabase/migrations/` directory inside your Supabase SQL editor:
 * `20260613063809_create_contact_messages_table.sql`: Creates the contact messages table.
-* `20260613063857_create_projects_table_with_seed.sql`: Creates the projects table and seeds initial portfolio items.
+* `20260613063857_create_projects_table_with_seed.sql`: Creates the projects table and initial seed data.
+* `20260824000000_create_system_health_table.sql`: Creates the system health telemetry table.
 
 ### 5. Install Dependencies
 
@@ -154,14 +154,14 @@ To create an optimized production build:
 npm run build
 ```
 
-This compiles TypeScript, bundles static assets via Next.js Turbopack, and exports static routes.
+This compiles TypeScript, bundles static assets via Next.js Turbopack, and exports static/dynamic routes.
 
 ### Deploying to Vercel
 
 The easiest way to deploy this portfolio is using Vercel:
 1. Connect your GitHub repository to Vercel.
-2. Configure your Environment Variables in the project settings.
-3. Deploy! Vercel will auto-detect Next.js and apply optimal build settings.
+2. Configure your Environment Variables in the project settings (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `ADMIN_PASSWORD`, `JWT_SECRET`, `CRON_SECRET`).
+3. Deploy! Vercel will auto-detect Next.js and apply the `vercel.json` cron configurations.
 
 ---
 
