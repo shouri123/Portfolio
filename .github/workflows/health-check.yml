@@ -1,0 +1,38 @@
+name: Scheduled Supabase Maintenance & Health Telemetry
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Daily at 03:00 UTC (08:30 AM IST)
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  maintenance-health-check:
+    name: Supabase Health & Telemetry Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger System Maintenance Endpoint
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -n "$CRON_SECRET" ]; then
+            AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+          else
+            AUTH_HEADER="User-Agent: GitHub-Actions-Health-Cron"
+          fi
+
+          echo "Pinging production health & telemetry endpoint..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X GET "https://devshouri.in/api/cron/health" \
+            -H "$AUTH_HEADER" \
+            -H "Accept: application/json")
+
+          HTTP_BODY=$(echo "$RESPONSE" | sed -e '$d')
+          HTTP_STATUS=$(echo "$RESPONSE" | tr -d '\n' | sed -e 's/.*HTTP_STATUS://')
+
+          echo "Response Status: $HTTP_STATUS"
+          echo "Response Body: $HTTP_BODY"
+
+          if [ "$HTTP_STATUS" -ne 200 ]; then
+            echo "::warning::Health check returned status $HTTP_STATUS. Please verify endpoint reachability."
+          else
+            echo "✓ Maintenance and health check completed successfully."
+          fi

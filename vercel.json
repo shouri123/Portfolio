@@ -2,6 +2,12 @@
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
+  "crons": [
+    {
+      "path": "/api/cron/health",
+      "schedule": "0 3 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

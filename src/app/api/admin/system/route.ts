@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifySession } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
 import {
   getActivityLogs,
   getGitHubActivityEvents,
   getRepoHealthItems,
-  getMaintainerMetrics,
-  addActivityLog
+  getMaintainerMetrics
 } from "@/lib/command-center-store";
 
 async function checkAuth() {
@@ -52,16 +52,50 @@ export async function GET() {
     console.warn("Failed to fetch live GitHub stats in system API:", err);
   }
 
+  // Fetch real database telemetry from Supabase system_health table
+  let dbStatus = "Operational";
+  let dbLatencyMs = 24;
+  let lastCheckAt = new Date().toISOString();
+  let nextCheckAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+  if (supabase) {
+    try {
+      const t0 = performance.now();
+      const { data, error } = await supabase
+        .from("system_health")
+        .select("*")
+        .eq("id", "current")
+        .maybeSingle();
+
+      const measuredLatency = Math.max(1, Math.round(performance.now() - t0));
+
+      if (data && !error) {
+        dbStatus = data.status === "operational" ? "Operational" : "Degraded";
+        dbLatencyMs = measuredLatency;
+        lastCheckAt = data.last_check_at || new Date().toISOString();
+        const lastCheckTime = new Date(lastCheckAt).getTime();
+        nextCheckAt = new Date(lastCheckTime + 24 * 60 * 60 * 1000).toISOString();
+      } else {
+        dbLatencyMs = measuredLatency;
+      }
+    } catch (err) {
+      console.warn("Failed to query system_health from Supabase:", err);
+      dbStatus = "Degraded";
+    }
+  }
+
   return NextResponse.json({
     health: {
       frontend: "Operational",
       api: "Operational",
-      database: "Operational",
+      database: dbStatus,
       storage: "Operational",
       githubApi: "Operational",
       analytics: "Operational",
       responseMs: 142,
-      databaseMs: 23
+      databaseMs: dbLatencyMs,
+      lastCheck: lastCheckAt,
+      nextCheck: nextCheckAt
     },
     metrics: {
       visitors: 12480,

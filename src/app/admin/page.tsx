@@ -50,7 +50,7 @@ export default function CommandCenterDashboard() {
   const [aiServices, setAiServices] = useState<any[]>([]);
   const [articles, setArticles] = useState<any[]>([]);
   const [systemStats, setSystemStats] = useState<any>({
-    health: { frontend: "Operational", api: "Operational", database: "Operational", storage: "Operational", githubApi: "Operational", responseMs: 142, databaseMs: 23 },
+    health: { frontend: "Operational", api: "Operational", database: "Operational", storage: "Operational", githubApi: "Operational", responseMs: 142, databaseMs: 24, lastCheck: "Just now", nextCheck: "Tomorrow 08:30 IST" },
     metrics: { visitors: 12480, stars: 92, forks: 124, publicRepos: 19, contributors: 50, prs: 200, opportunitiesCount: 4 },
     activity: [],
     githubEvents: [],
@@ -324,14 +324,21 @@ export default function CommandCenterDashboard() {
 
     if (cmd === "help") {
       newLogs.push("Available CLI Commands:");
-      newLogs.push("  status   - Show system health metrics");
-      newLogs.push("  sync     - Run GitHub API synchronization");
-      newLogs.push("  projects - List current project count");
-      newLogs.push("  career   - Display career status and headline");
-      newLogs.push("  crm      - Show unread opportunities count");
-      newLogs.push("  clear    - Clear terminal screen");
+      newLogs.push("  status      - Show all system health & latency metrics");
+      newLogs.push("  health      - Inspect Supabase database telemetry & cron status");
+      newLogs.push("  sync        - Run GitHub API synchronization");
+      newLogs.push("  projects    - List current project count");
+      newLogs.push("  career      - Display career status and headline");
+      newLogs.push("  crm         - Show unread opportunities count");
+      newLogs.push("  clear       - Clear terminal screen");
     } else if (cmd === "status") {
-      newLogs.push(`System Health: ALL SYSTEMS OPERATIONAL (Latency: ${systemStats.health?.responseMs || 142}ms)`);
+      newLogs.push(`System Status: ALL SYSTEMS OPERATIONAL (API: ${systemStats.health?.responseMs || 142}ms | Supabase DB: ${systemStats.health?.databaseMs || 24}ms)`);
+    } else if (cmd === "health" || cmd === "telemetry") {
+      newLogs.push(`[DATABASE TELEMETRY] Node: Supabase PostgreSQL (devshouri.in)`);
+      newLogs.push(`  • Status: ${systemStats.health?.database || "Operational"}`);
+      newLogs.push(`  • Latency: ${systemStats.health?.databaseMs || 24}ms round-trip`);
+      newLogs.push(`  • Last Health Check: ${systemStats.health?.lastCheck ? new Date(systemStats.health.lastCheck).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "08:30 IST"} (Automated Cron)`);
+      newLogs.push(`  • Next Scheduled Run: ${systemStats.health?.nextCheck ? new Date(systemStats.health.nextCheck).toLocaleDateString([], { month: 'short', day: 'numeric' }) : "Tomorrow"} 08:30 IST`);
     } else if (cmd === "sync") {
       newLogs.push("[SYNC] Triggered GitHub API sync. Live calculated stars & forks verified.");
       handleSyncGithub();
@@ -1460,25 +1467,27 @@ export default function CommandCenterDashboard() {
               <div className="bg-[#0f0f0f] border border-white/10 p-4 rounded-2xl">
                 <div className="text-gray-500 text-[10px]">Frontend Server</div>
                 <div className="text-emerald-400 font-bold mt-1">● Operational</div>
-                <div className="text-[10px] text-gray-500 mt-0.5">Latency: 142ms</div>
+                <div className="text-[10px] text-gray-500 mt-0.5">Latency: {systemStats.health?.responseMs || 142}ms</div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-4 rounded-2xl">
-                <div className="text-gray-500 text-[10px]">Database Node</div>
-                <div className="text-emerald-400 font-bold mt-1">● Operational</div>
-                <div className="text-[10px] text-gray-500 mt-0.5">Latency: 23ms</div>
+                <div className="text-gray-500 text-[10px]">Database (Supabase)</div>
+                <div className="text-emerald-400 font-bold mt-1">● {systemStats.health?.database || "Operational"}</div>
+                <div className="text-[10px] text-gray-500 mt-0.5">
+                  Latency: {systemStats.health?.databaseMs || 24}ms • Checked: {systemStats.health?.lastCheck ? new Date(systemStats.health.lastCheck).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "08:30 IST"}
+                </div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-4 rounded-2xl">
                 <div className="text-gray-500 text-[10px]">GitHub API Sync</div>
                 <div className="text-emerald-400 font-bold mt-1">● Operational</div>
-                <div className="text-[10px] text-gray-500 mt-0.5">Status: Synced</div>
+                <div className="text-[10px] text-gray-500 mt-0.5">Status: Synced ({systemStats.metrics?.stars || 92}⭐ / {systemStats.metrics?.forks || 124}🍴)</div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-4 rounded-2xl">
-                <div className="text-gray-500 text-[10px]">Storage Bucket</div>
+                <div className="text-gray-500 text-[10px]">Storage & Quota</div>
                 <div className="text-emerald-400 font-bold mt-1">● Operational</div>
-                <div className="text-[10px] text-gray-500 mt-0.5">Quota: 12% Used</div>
+                <div className="text-[10px] text-gray-500 mt-0.5">Auto-Cron: Daily 08:30 IST</div>
               </div>
             </div>
 
