@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifySession } from "@/lib/auth";
-import { getActivityLogs } from "@/lib/command-center-store";
+import {
+  getActivityLogs,
+  getGitHubActivityEvents,
+  getRepoHealthItems,
+  getMaintainerMetrics
+} from "@/lib/command-center-store";
 
 async function checkAuth() {
   const cookieStore = await cookies();
@@ -30,8 +35,12 @@ export async function GET() {
       stars: 92,
       forks: 124,
       contributors: 50,
+      prs: 200,
       opportunitiesCount: 4
     },
-    activity: getActivityLogs()
+    activity: getActivityLogs(),
+    githubEvents: getGitHubActivityEvents(),
+    repoHealth: getRepoHealthItems(),
+    maintainerMetrics: getMaintainerMetrics()
   });
 }

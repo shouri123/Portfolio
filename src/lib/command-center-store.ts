@@ -27,6 +27,8 @@ export interface AIServiceStatus {
   status: "Connected" | "Configured" | "Standby" | "Offline";
   model: string;
   lastRequest: string;
+  latency?: string;
+  promptsServed?: number;
 }
 
 export interface ContentArticle {
@@ -50,6 +52,36 @@ export interface CRMMessage {
   category: "Internship" | "Freelance" | "Collaboration" | "General";
   status: "unread" | "read" | "replied" | "archived";
   admin_notes?: string;
+}
+
+export interface GitHubActivityEvent {
+  id: string;
+  action: string;
+  repo: string;
+  timeLabel: string;
+  type: "pr_merged" | "issue_opened" | "contributor_joined" | "star_received" | "commit_pushed";
+}
+
+export interface RepoHealthItem {
+  name: string;
+  stars: number;
+  forks: number;
+  openIssues: number;
+  status: "Active" | "Healthy" | "Maintenance";
+  lastCommit: string;
+}
+
+export interface MaintainerMetrics {
+  totalProjects: number;
+  activeProjects: number;
+  totalContributors: number;
+  mergedPRs: number;
+  openIssues: number;
+  lastActivity: string;
+  prResponseQuality: string;
+  issueActivity: string;
+  contributorGrowthTrend: string;
+  communityScore: string;
 }
 
 let careerData: CareerProfile = {
@@ -100,11 +132,11 @@ let activityLogs: ActivityItem[] = [
 ];
 
 let aiServices: AIServiceStatus[] = [
-  { id: "ai-1", name: "OpenAI", status: "Connected", model: "gpt-4o / Agents SDK", lastRequest: "3m ago" },
-  { id: "ai-2", name: "GitHub API", status: "Connected", model: "GraphQL v4 / REST v3", lastRequest: "1m ago" },
-  { id: "ai-3", name: "Supabase", status: "Connected", model: "PostgreSQL v15", lastRequest: "Just now" },
-  { id: "ai-4", name: "Gemini", status: "Connected", model: "Gemini 1.5 Pro / Flash", lastRequest: "12m ago" },
-  { id: "ai-5", name: "ElevenLabs", status: "Configured", model: "v2 Voice Synthesis", lastRequest: "1h ago" }
+  { id: "ai-1", name: "OpenAI API", status: "Connected", model: "gpt-4o / Realtime SDK", lastRequest: "3m ago", latency: "142ms", promptsServed: 840 },
+  { id: "ai-2", name: "GitHub GraphQL", status: "Connected", model: "GraphQL v4 / REST v3", lastRequest: "1m ago", latency: "64ms", promptsServed: 1250 },
+  { id: "ai-3", name: "Supabase DB", status: "Connected", model: "PostgreSQL v17", lastRequest: "Just now", latency: "23ms", promptsServed: 3100 },
+  { id: "ai-4", name: "Gemini 1.5", status: "Connected", model: "Gemini Pro / Flash", lastRequest: "12m ago", latency: "189ms", promptsServed: 420 },
+  { id: "ai-5", name: "ElevenLabs", status: "Configured", model: "v2 Voice Synthesis", lastRequest: "1h ago", latency: "210ms", promptsServed: 190 }
 ];
 
 let articlesList: ContentArticle[] = [
@@ -163,6 +195,37 @@ let crmMessages: CRMMessage[] = [
     admin_notes: "Scheduled phone screen for Friday."
   }
 ];
+
+let githubEvents: GitHubActivityEvent[] = [
+  { id: "gh-1", action: "PR #241 merged", repo: "Late-Meet", timeLabel: "18 min ago", type: "pr_merged" },
+  { id: "gh-2", action: "Issue #84 opened: 'Add VAD sensitivity slider'", repo: "Late-Meet", timeLabel: "1 hr ago", type: "issue_opened" },
+  { id: "gh-3", action: "New contributor joined squad", repo: "Aven", timeLabel: "3 hr ago", type: "contributor_joined" },
+  { id: "gh-4", action: "Star received from @dev_alex", repo: "Late-Meet", timeLabel: "4 hr ago", type: "star_received" },
+  { id: "gh-5", action: "Pushed 3 commits to main branch", repo: "Portfolio", timeLabel: "5 hr ago", type: "commit_pushed" },
+  { id: "gh-6", action: "PR #112 reviewed & approved", repo: "Chat-Buddy", timeLabel: "8 hr ago", type: "pr_merged" }
+];
+
+let repoHealthList: RepoHealthItem[] = [
+  { name: "Late-Meet", stars: 38, forks: 88, openIssues: 12, status: "Active", lastCommit: "18 min ago" },
+  { name: "Aven", stars: 24, forks: 16, openIssues: 5, status: "Active", lastCommit: "3 hr ago" },
+  { name: "Portfolio", stars: 12, forks: 8, openIssues: 2, status: "Active", lastCommit: "Just now" },
+  { name: "Chat-Buddy", stars: 18, forks: 12, openIssues: 4, status: "Healthy", lastCommit: "8 hr ago" },
+  { name: "WRAP-YOUR-GIT", stars: 15, forks: 9, openIssues: 1, status: "Healthy", lastCommit: "2 days ago" },
+  { name: "Student-Copilot", stars: 12, forks: 4, openIssues: 3, status: "Maintenance", lastCommit: "5 days ago" }
+];
+
+let maintainerMetrics: MaintainerMetrics = {
+  totalProjects: 6,
+  activeProjects: 3,
+  totalContributors: 50,
+  mergedPRs: 200,
+  openIssues: 27,
+  lastActivity: "18 min ago",
+  prResponseQuality: "Excellent (< 2h avg)",
+  issueActivity: "High (daily triage)",
+  contributorGrowthTrend: "+18% this month",
+  communityScore: "91%"
+};
 
 export function getCareerProfile(): CareerProfile {
   return { ...careerData };
@@ -233,4 +296,16 @@ export function deleteCRMMessage(id: string): boolean {
   const initialLength = crmMessages.length;
   crmMessages = crmMessages.filter(m => String(m.id) !== String(id));
   return crmMessages.length < initialLength;
+}
+
+export function getGitHubActivityEvents(): GitHubActivityEvent[] {
+  return [...githubEvents];
+}
+
+export function getRepoHealthItems(): RepoHealthItem[] {
+  return [...repoHealthList];
+}
+
+export function getMaintainerMetrics(): MaintainerMetrics {
+  return { ...maintainerMetrics };
 }
