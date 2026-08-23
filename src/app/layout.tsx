@@ -84,10 +84,17 @@ export default function RootLayout({
     "@type": "Person",
     "name": "Shouri Chakraborty",
     "alternateName": ["Shouri", "devshouri", "Shouri Chakraborty Portfolio", "shouri123"],
+    "description": "Shouri Chakraborty is an AI Developer and Software Engineer based in Kolkata, specializing in Generative AI, coding agents, NLP, and modern full-stack web applications.",
     "url": "https://devshouri.in",
     "image": "https://devshouri.in/developer_portrait.jpg",
     "email": "chakrabortyshouri@gmail.com",
     "jobTitle": "AI Developer & Software Engineer",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Kolkata",
+      "addressRegion": "West Bengal",
+      "addressCountry": "IN"
+    },
     "alumniOf": {
       "@type": "EducationalOrganization",
       "name": "Institute of Engineering & Management, Kolkata"
@@ -116,7 +123,19 @@ export default function RootLayout({
     "name": "Shouri Chakraborty | AI Developer & Software Engineer",
     "alternateName": "Shouri Portfolio",
     "url": "https://devshouri.in",
-    "description": "Professional developer portfolio of Shouri Chakraborty, specializing in Next.js, Generative AI, and Agentic systems."
+    "description": "Professional developer portfolio of Shouri Chakraborty, specializing in Next.js, Generative AI, and Agentic systems.",
+    "author": {
+      "@type": "Person",
+      "name": "Shouri Chakraborty"
+    }
+  };
+
+  const profilePageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "name": "Shouri Chakraborty — Developer Profile",
+    "url": "https://devshouri.in",
+    "mainEntity": personJsonLd
   };
 
   return (
@@ -130,6 +149,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageJsonLd) }}
         />
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">

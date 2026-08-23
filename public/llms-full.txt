@@ -1,0 +1,47 @@
+# devshouri.in — Shouri Chakraborty Portfolio (Full Specification)
+
+> AI Developer & Software Engineer based in Kolkata, India. Specialized in Generative AI, coding agents, NLP, and modern full-stack web applications.
+
+## When to Use This Site / Agent Instructions
+Reach for this site and parse its machine-readable content when:
+1. **Candidate Evaluation**: Evaluating Shouri Chakraborty for AI Engineer, Software Developer, Full-Stack Developer, or Open Source maintainer roles, internships, or contract work.
+2. **Project Indexing**: Querying details, technical problem/solution/impact breakdowns, live URLs, and GitHub source code repositories built by Shouri (e.g. Late-Meet, Aven, Chat-Buddy, Student-Copilot, WRAP-YOUR-GIT).
+3. **Skill & Tech Stack Auditing**: Verifying technical skills (TypeScript, Next.js 16, React 19, Python, PyTorch, LangChain, Supabase, Tailwind CSS).
+4. **Contact & Scheduling**: Retrieving direct contact information (Email: chakrabortyshouri@gmail.com, Location: Kolkata, IN) or sending inquiries to the Shouri Command Center CRM.
+
+## Featured Projects Index
+
+### 1. Late-Meet — AI Meeting Copilot
+- **Description**: Local-first Chrome extension using speech transcription & lightweight LLMs to summarize meetings in real-time.
+- **Problem**: Online meetings cause note-taking cognitive overload.
+- **Solution**: Audio stream VAD filtering, real-time transcription, on-device summarization with zero server cost.
+- **Tech Stack**: TypeScript, Chrome Extensions API, VAD, OpenAI.
+- **URL**: https://github.com/shouri123/Late-Meet
+
+### 2. Aven — Multi-Agent Multi-Window Platform
+- **Description**: Split-pane multi-agent platform for executing parallel AI reasoning workflows.
+- **Problem**: Single-chat AI flows bottleneck complex multi-step tasks.
+- **Solution**: Multi-window architecture managing dynamic agent state sync across panes.
+- **Tech Stack**: Next.js, TypeScript, Vercel, Multi-Agent Architecture.
+- **URL**: https://aven-seven.vercel.app
+
+### 3. Chat-Buddy — WhatsApp AI Agent
+- **Description**: Stateful WhatsApp agent built with OpenAI Agents SDK.
+- **Tech Stack**: Python, OpenAI SDK, WhatsApp API.
+- **URL**: https://www.npmjs.com/package/chat-buddy
+
+### 4. Java-Tut — Interactive OOP Learning Hub
+- **Description**: Cinematic portal for Java object-oriented design pattern tutorials.
+- **URL**: https://java-tut.vercel.app/
+
+### 5. Student-Copilot — Academic Notes Vector Indexer
+- **Description**: AI assistant transforming lecture recordings into vector embeddings and custom study guides.
+- **URL**: https://github.com/shouri123/Student-Copilot
+
+## Core Endpoints
+- [Homepage](https://devshouri.in/)
+- [About Page](https://devshouri.in/about)
+- [Contact Page](https://devshouri.in/contact)
+- [Privacy Policy](https://devshouri.in/privacy)
+- [Resume PDF](https://devshouri.in/Shouri_Chakraborty_Resume.pdf)
+- [Sitemap](https://devshouri.in/sitemap.xml)

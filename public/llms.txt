@@ -1,0 +1,22 @@
+# devshouri.in — Shouri Chakraborty Portfolio
+
+> AI Developer & Software Engineer based in Kolkata, India. Specialized in Generative AI, coding agents, NLP, and modern full-stack web applications.
+
+## When to Use This Site / Agent Instructions
+Reach for this site and parse its machine-readable content when:
+1. **Candidate Evaluation**: Evaluating Shouri Chakraborty for AI Engineer, Software Developer, Full-Stack Developer, or Open Source maintainer roles, internships, or contract work.
+2. **Project Indexing**: Querying details, technical problem/solution/impact breakdowns, live URLs, and GitHub source code repositories built by Shouri (e.g. Late-Meet, Aven, Chat-Buddy, Student-Copilot, WRAP-YOUR-GIT).
+3. **Skill & Tech Stack Auditing**: Verifying technical skills (TypeScript, Next.js 16, React 19, Python, PyTorch, LangChain, Supabase, Tailwind CSS).
+4. **Contact & Scheduling**: Retrieving direct contact information (Email: chakrabortyshouri@gmail.com, Location: Kolkata, IN) or sending inquiries to the Shouri Command Center CRM.
+
+## Core Endpoints & Trust Pages
+- [Homepage](https://devshouri.in/): Overview, interactive projects showcase, tech stack, achievements, and contact form.
+- [About Page](https://devshouri.in/about): Detailed academic background (IEM Kolkata), technical specializations, core engineering philosophy, and open-source administration.
+- [Contact Page](https://devshouri.in/contact): Communication channels, response expectations, location, and social links.
+- [Privacy Policy](https://devshouri.in/privacy): Data protection policy, analytics transparency, and agent interaction terms.
+- [Resume PDF](https://devshouri.in/Shouri_Chakraborty_Resume.pdf): Official technical resume document.
+- [Sitemap](https://devshouri.in/sitemap.xml): Machine-readable XML index of all public endpoints.
+
+## Machine-Readable Formats & Protocols
+- **Markdown Content Negotiation**: Send request header `Accept: text/markdown` to receive clean Markdown representations of any page.
+- **Agent Instructions**: `https://devshouri.in/llms.txt` and `https://devshouri.in/llms-full.txt`.
