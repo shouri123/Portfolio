@@ -92,7 +92,7 @@ export default function HeroSection() {
         {/* Left Column: Heading */}
         <div className="w-full md:w-8/12">
           <h1 className="text-[#E1E0CC] text-[24vw] sm:text-[22vw] md:text-[20vw] lg:text-[18vw] xl:text-[17vw] font-medium leading-[0.85] tracking-[-0.07em]">
-            <span className="sr-only">Shouri Chakraborty | AI Developer & Software Engineer Portfolio</span>
+            <span className="sr-only">Shouri Chakraborty — AI Developer, Software Engineer & Open Source Maintainer</span>
             <GsapWordsPullUp 
               as="span"
               text="Shouri" 
