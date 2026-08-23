@@ -69,8 +69,7 @@ export default function HomeClient({ initialProjects }: HomeClientProps) {
           }}
         />
       )}
-      {!isLoading && (
-        <main className="w-full min-h-screen bg-black">
+      <main className="w-full min-h-screen bg-black">
           <HeroSection />
           
           <GsapMarquee
@@ -139,7 +138,6 @@ export default function HomeClient({ initialProjects }: HomeClientProps) {
           {/* Live matches commentaries */}
           {isFootballMode && <MatchCommentary />}
         </main>
-      )}
     </>
   );
 }
