@@ -2,6 +2,23 @@ import { NextRequest } from "next/server";
 
 // In-memory cache for IP rate limiting
 const ipCache = new Map<string, { count: number; resetTime: number }>();
+const MAX_CACHE_SIZE = 10000;
+
+/**
+ * Periodically purges expired IP entries from memory
+ */
+function cleanupIpCache() {
+  const now = Date.now();
+  for (const [ip, record] of ipCache.entries()) {
+    if (now > record.resetTime) {
+      ipCache.delete(ip);
+    }
+  }
+  // Hard limit memory growth if overflowed
+  if (ipCache.size > MAX_CACHE_SIZE) {
+    ipCache.clear();
+  }
+}
 
 /**
  * Checks if a given IP has exceeded the allowed number of requests in the window
@@ -12,6 +29,12 @@ export function isRateLimited(
   windowMs: number = 600000 // default 10 minutes
 ): boolean {
   const now = Date.now();
+
+  // Perform memory cleanup on every rate limit check
+  if (Math.random() < 0.1) {
+    cleanupIpCache();
+  }
+
   const record = ipCache.get(ip);
   
   if (!record) {
@@ -30,15 +53,27 @@ export function isRateLimited(
 }
 
 /**
- * Helper to resolve the client IP from NextRequest
+ * Helper to resolve the client IP from Request or NextRequest, handling Cloudflare,
+ * proxy headers (X-Real-IP), and multi-hop X-Forwarded-For safely.
  */
-export function getClientIp(request: Request): string {
-  // If request is NextRequest, we can check headers
+export function getClientIp(request: Request | NextRequest): string {
   const headers = request.headers;
+
+  // 1. Cloudflare connecting IP
+  const cfIp = headers.get("cf-connecting-ip");
+  if (cfIp) return cfIp.trim();
+
+  // 2. Standard X-Real-IP
+  const xRealIp = headers.get("x-real-ip");
+  if (xRealIp) return xRealIp.trim();
+
+  // 3. Multi-hop X-Forwarded-For (take the leftmost original client IP)
   const xForwardedFor = headers.get("x-forwarded-for");
   if (xForwardedFor) {
-    return xForwardedFor.split(",")[0].trim();
+    const clientIp = xForwardedFor.split(",")[0].trim();
+    if (clientIp) return clientIp;
   }
+
   return "127.0.0.1";
 }
 
