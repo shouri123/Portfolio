@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { Mail, ArrowUpRight, Loader2, CheckCircle2 } from "lucide-react";
-import { useFootballMode } from "@/lib/context/FootballModeContext";
-import PenaltyShootout from "@/components/football/PenaltyShootout";
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -24,7 +22,6 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 );
 
 export default function FooterSection() {
-  const { isFootballMode } = useFootballMode();
   const [emailUnlocked, setEmailUnlocked] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -157,9 +154,7 @@ export default function FooterSection() {
         <div className="w-full lg:w-1/2 max-w-xl bg-white/2 border border-white/8 p-8 md:p-10 rounded-4xl backdrop-blur-md relative overflow-hidden flex flex-col justify-between">
           <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
 
-          {isFootballMode && !emailUnlocked ? (
-            <PenaltyShootout onUnlock={() => setEmailUnlocked(true)} isUnlocked={emailUnlocked} />
-          ) : status === "success" ? (
+          {status === "success" ? (
             <div className="py-12 text-center flex flex-col items-center justify-center gap-4 animate-[fadeIn_0.5s_ease-out]">
               <CheckCircle2 className="w-16 h-16 text-primary/80 animate-[scaleIn_0.3s_ease-out]" />
               <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight">Transmission Received</h3>
