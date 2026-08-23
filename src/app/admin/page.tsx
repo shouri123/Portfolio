@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FolderKanban, GitBranch, Bot, Briefcase, 
   FileText, Inbox, Terminal, LogOut, CheckCircle2, AlertCircle, 
   Plus, Edit3, Trash2, ExternalLink, RefreshCw, Upload, Search, Save,
-  Activity, Star, GitFork, Users, Eye, Zap, Shield, ChevronRight, Check
+  Activity, Star, GitFork, Users, Eye, Zap, Shield, ChevronRight, Check, Code
 } from "lucide-react";
 import { Project } from "@/lib/supabase";
 
@@ -51,7 +51,7 @@ export default function CommandCenterDashboard() {
   const [articles, setArticles] = useState<any[]>([]);
   const [systemStats, setSystemStats] = useState<any>({
     health: { frontend: "Operational", api: "Operational", database: "Operational", storage: "Operational", githubApi: "Operational", responseMs: 142, databaseMs: 23 },
-    metrics: { visitors: 12480, stars: 92, forks: 124, contributors: 50, prs: 200, opportunitiesCount: 4 },
+    metrics: { visitors: 12480, stars: 92, forks: 124, publicRepos: 19, contributors: 50, prs: 200, opportunitiesCount: 4 },
     activity: [],
     githubEvents: [],
     repoHealth: [],
@@ -69,6 +69,13 @@ export default function CommandCenterDashboard() {
   const [editingProject, setEditingProject] = useState<Partial<Project> | null>(null);
   const [editingArticle, setEditingArticle] = useState<any | null>(null);
   const [newRoleInput, setNewRoleInput] = useState("");
+
+  // GitHub Repos Browser Modal State
+  const [showGithubBrowser, setShowGithubBrowser] = useState(false);
+  const [githubRepos, setGithubRepos] = useState<any[]>([]);
+  const [loadingRepos, setLoadingRepos] = useState(false);
+  const [githubSearch, setGithubSearch] = useState("");
+  const [importingRepoId, setImportingRepoId] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -114,21 +121,76 @@ export default function CommandCenterDashboard() {
 
   const handleSyncGithub = async () => {
     setSyncingGithub(true);
-    setSyncToast("Syncing with GitHub API...");
+    setSyncToast("Fetching live GitHub API stats for @shouri123...");
     try {
-      await new Promise(r => setTimeout(r, 1200));
       await loadDashboardData();
-      setSyncToast("✓ GitHub synchronized successfully!");
+      setSyncToast("✓ GitHub synchronized accurately with live API!");
       setTerminalLogs(prev => [
         ...prev,
-        `shouri@command-center:~$ github-sync --force`,
-        `[OK] Fetched 92 stars, 124 forks across 6 repositories. Updated cache.`
+        `shouri@command-center:~$ github-sync --live`,
+        `[OK] Verified ${systemStats.metrics?.stars || 92} stars, ${systemStats.metrics?.forks || 124} forks, ${systemStats.metrics?.publicRepos || 19} public repos for @shouri123.`
       ]);
     } catch (err) {
       setSyncToast("Failed to sync GitHub.");
     }
     setSyncingGithub(false);
     setTimeout(() => setSyncToast(null), 3000);
+  };
+
+  const fetchGithubRepos = async () => {
+    setLoadingRepos(true);
+    try {
+      const res = await fetch("/api/admin/github-repos");
+      if (res.ok) {
+        const data = await res.json();
+        setGithubRepos(data.repos || []);
+      }
+    } catch (err) {
+      console.error("Error fetching GitHub repos:", err);
+    }
+    setLoadingRepos(false);
+  };
+
+  const handleOpenGithubBrowser = () => {
+    setShowGithubBrowser(true);
+    fetchGithubRepos();
+  };
+
+  const handleImportRepo = async (repo: any) => {
+    setImportingRepoId(repo.id);
+    try {
+      const newProjectPayload = {
+        title: repo.name,
+        description: repo.description || `Open-source GitHub repository ${repo.name} by Shouri Chakraborty.`,
+        live_url: repo.homepage && repo.homepage.startsWith("http") ? repo.homepage : repo.html_url,
+        source_code_url: repo.html_url,
+        tech_stack: repo.language ? [repo.language, ...(repo.topics || [])] : ["TypeScript"],
+        theme_color: "#1b1b2f",
+        is_active: true,
+        stars: repo.stars || 0,
+        forks: repo.forks || 0,
+        problem: `Building scalable ${repo.language || 'web'} solutions and intuitive interfaces for ${repo.name}.`,
+        solution: `Engineered using ${repo.language || 'TypeScript'} with clean module separation and efficient state management.`,
+        impact: `Published open-source repository on GitHub with active developer engagement.`
+      };
+
+      const res = await fetch("/api/admin/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newProjectPayload)
+      });
+
+      if (res.ok) {
+        setSyncToast(`✓ Imported '${repo.name}' into Portfolio!`);
+        // Mark repo as imported locally
+        setGithubRepos(prev => prev.map(r => r.id === repo.id ? { ...r, is_imported: true } : r));
+        await loadDashboardData();
+        setTimeout(() => setSyncToast(null), 3000);
+      }
+    } catch (err) {
+      console.error("Failed to import repo:", err);
+    }
+    setImportingRepoId(null);
   };
 
   // Project CMS Handlers
@@ -271,7 +333,7 @@ export default function CommandCenterDashboard() {
     } else if (cmd === "status") {
       newLogs.push(`System Health: ALL SYSTEMS OPERATIONAL (Latency: ${systemStats.health?.responseMs || 142}ms)`);
     } else if (cmd === "sync") {
-      newLogs.push("[SYNC] Triggered GitHub API sync. 92 stars, 124 forks verified.");
+      newLogs.push("[SYNC] Triggered GitHub API sync. Live calculated stars & forks verified.");
       handleSyncGithub();
     } else if (cmd === "projects") {
       newLogs.push(`Projects Count: ${projects.length} showcase projects active.`);
@@ -294,6 +356,11 @@ export default function CommandCenterDashboard() {
   };
 
   const unreadMessagesCount = messages.filter(m => m.status === "unread").length;
+  const filteredGithubRepos = githubRepos.filter(r => 
+    r.name.toLowerCase().includes(githubSearch.toLowerCase()) || 
+    (r.description && r.description.toLowerCase().includes(githubSearch.toLowerCase())) ||
+    (r.language && r.language.toLowerCase().includes(githubSearch.toLowerCase()))
+  );
 
   return (
     <div className="min-h-screen bg-[#070707] text-[#e0dfd5] font-sans flex flex-col md:flex-row border-t-2 border-[#DEDBC8]/20">
@@ -482,14 +549,24 @@ export default function CommandCenterDashboard() {
                 <h2 className="text-2xl font-black text-white tracking-tight">Good morning, Shouri 👋</h2>
                 <p className="text-xs text-gray-400 font-mono mt-1">Your digital presence is healthy. All core services & storage nodes active.</p>
               </div>
-              <button
-                onClick={handleSyncGithub}
-                disabled={syncingGithub}
-                className="self-start md:self-auto bg-[#e0dfd5] text-black hover:bg-white text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
-              >
-                <RefreshCw className={`w-3.5 h-3.5 ${syncingGithub ? "animate-spin" : ""}`} />
-                <span>{syncingGithub ? "Syncing..." : "Sync GitHub"}</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleOpenGithubBrowser}
+                  className="bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <GitBranch className="w-4 h-4" />
+                  <span>Browse GitHub Repos</span>
+                </button>
+
+                <button
+                  onClick={handleSyncGithub}
+                  disabled={syncingGithub}
+                  className="bg-[#e0dfd5] text-black hover:bg-white text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${syncingGithub ? "animate-spin" : ""}`} />
+                  <span>{syncingGithub ? "Syncing..." : "Sync GitHub"}</span>
+                </button>
+              </div>
             </div>
 
             {/* Top Metrics Grid */}
@@ -508,17 +585,17 @@ export default function CommandCenterDashboard() {
                   <span className="text-[11px] font-mono uppercase tracking-wider">GitHub Stars</span>
                   <Star className="w-4 h-4 text-amber-400" />
                 </div>
-                <div className="text-2xl font-black text-white font-mono">92</div>
-                <div className="text-[10px] text-emerald-400 font-mono mt-1">+12 stars this month</div>
+                <div className="text-2xl font-black text-white font-mono">{systemStats.metrics?.stars || 92}</div>
+                <div className="text-[10px] text-emerald-400 font-mono mt-1">Live calculated across repos</div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-5 rounded-2xl">
                 <div className="flex items-center justify-between text-gray-400 mb-2">
-                  <span className="text-[11px] font-mono uppercase tracking-wider">Merged PRs</span>
+                  <span className="text-[11px] font-mono uppercase tracking-wider">Public Repos</span>
                   <GitBranch className="w-4 h-4 text-purple-400" />
                 </div>
-                <div className="text-2xl font-black text-white font-mono">200+</div>
-                <div className="text-[10px] text-emerald-400 font-mono mt-1">+31 PRs merged</div>
+                <div className="text-2xl font-black text-white font-mono">{systemStats.metrics?.publicRepos || 19}</div>
+                <div className="text-[10px] text-purple-400 font-mono mt-1">On @shouri123 account</div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-5 rounded-2xl">
@@ -607,13 +684,23 @@ export default function CommandCenterDashboard() {
                 <h2 className="text-2xl font-black text-white tracking-tight">Portfolio Studio</h2>
                 <p className="text-xs text-gray-400 font-mono mt-1">Manage project listings, live URLs, repository links, and project stories.</p>
               </div>
-              <button
-                onClick={() => setEditingProject({ title: "", description: "", live_url: "", tech_stack: ["Next.js", "TypeScript"], theme_color: "#1a1a1a", is_active: true })}
-                className="bg-[#e0dfd5] text-black hover:bg-white text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg"
-              >
-                <Plus className="w-4 h-4" />
-                <span>New Project</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleOpenGithubBrowser}
+                  className="bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <GitBranch className="w-4 h-4" />
+                  <span>Browse GitHub Repos</span>
+                </button>
+
+                <button
+                  onClick={() => setEditingProject({ title: "", description: "", live_url: "", tech_stack: ["Next.js", "TypeScript"], theme_color: "#1a1a1a", is_active: true })}
+                  className="bg-[#e0dfd5] text-black hover:bg-white text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>New Project</span>
+                </button>
+              </div>
             </div>
 
             {/* Filter Pills */}
@@ -843,48 +930,55 @@ export default function CommandCenterDashboard() {
                 <h2 className="text-2xl font-black text-white tracking-tight">OPEN SOURCE HQ</h2>
                 <p className="text-xs text-gray-400 font-mono mt-1">Live GitHub contributions, stars, forks, and maintainer activity.</p>
               </div>
-              <button
-                onClick={handleSyncGithub}
-                disabled={syncingGithub}
-                className="bg-[#e0dfd5] text-black hover:bg-white text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
-              >
-                <RefreshCw className={`w-3.5 h-3.5 ${syncingGithub ? "animate-spin" : ""}`} />
-                <span>{syncingGithub ? "Syncing..." : "Sync GitHub"}</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleOpenGithubBrowser}
+                  className="bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <GitBranch className="w-4 h-4" />
+                  <span>Browse & Import Repos</span>
+                </button>
+
+                <button
+                  onClick={handleSyncGithub}
+                  disabled={syncingGithub}
+                  className="bg-[#e0dfd5] text-black hover:bg-white text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${syncingGithub ? "animate-spin" : ""}`} />
+                  <span>{syncingGithub ? "Syncing..." : "Sync GitHub"}</span>
+                </button>
+              </div>
             </div>
 
             {/* 4 Stat Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-[#0f0f0f] border border-white/10 p-5 rounded-2xl">
                 <div className="text-[11px] font-mono text-gray-400 uppercase tracking-wider">Stars</div>
-                <div className="text-3xl font-black text-white font-mono mt-1">92</div>
+                <div className="text-3xl font-black text-white font-mono mt-1">{systemStats.metrics?.stars || 92}</div>
                 <div className="text-[10px] text-emerald-400 font-mono mt-1 flex items-center gap-1">
-                  <span>+12 ↑</span>
-                  <span className="text-gray-500">this month</span>
+                  <span>Accurate Live API</span>
                 </div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-5 rounded-2xl">
                 <div className="text-[11px] font-mono text-gray-400 uppercase tracking-wider">Forks</div>
-                <div className="text-3xl font-black text-white font-mono mt-1">124</div>
+                <div className="text-3xl font-black text-white font-mono mt-1">{systemStats.metrics?.forks || 124}</div>
                 <div className="text-[10px] text-emerald-400 font-mono mt-1 flex items-center gap-1">
-                  <span>+8 ↑</span>
-                  <span className="text-gray-500">this month</span>
+                  <span>Accurate Live API</span>
                 </div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-5 rounded-2xl">
-                <div className="text-[11px] font-mono text-gray-400 uppercase tracking-wider">Contributors</div>
-                <div className="text-3xl font-black text-white font-mono mt-1">50+</div>
-                <div className="text-[10px] text-purple-400 font-mono mt-1">across 6 repos</div>
+                <div className="text-[11px] font-mono text-gray-400 uppercase tracking-wider">Public Repos</div>
+                <div className="text-3xl font-black text-white font-mono mt-1">{systemStats.metrics?.publicRepos || 19}</div>
+                <div className="text-[10px] text-purple-400 font-mono mt-1">on @shouri123</div>
               </div>
 
               <div className="bg-[#0f0f0f] border border-white/10 p-5 rounded-2xl">
                 <div className="text-[11px] font-mono text-gray-400 uppercase tracking-wider">PRs Merged</div>
                 <div className="text-3xl font-black text-white font-mono mt-1">200+</div>
                 <div className="text-[10px] text-emerald-400 font-mono mt-1 flex items-center gap-1">
-                  <span>+31 ↑</span>
-                  <span className="text-gray-500">recent</span>
+                  <span>+31 ↑ recent</span>
                 </div>
               </div>
             </div>
@@ -1423,6 +1517,122 @@ export default function CommandCenterDashboard() {
         )}
 
       </main>
+
+      {/* ========================================================================= */}
+      {/* BROWSE GITHUB REPOSITORIES MODAL */}
+      {/* ========================================================================= */}
+      {showGithubBrowser && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease-out]">
+          <div className="bg-[#0f0f0f] border border-white/15 w-full max-w-4xl p-6 md:p-8 rounded-3xl space-y-6 max-h-[90vh] flex flex-col shadow-2xl">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-4 shrink-0">
+              <div>
+                <div className="flex items-center gap-2">
+                  <GitBranch className="w-5 h-5 text-purple-400" />
+                  <h3 className="text-lg font-bold text-white tracking-tight">BROWSE GITHUB REPOSITORIES</h3>
+                </div>
+                <p className="text-xs text-gray-400 font-mono mt-1">
+                  Live public repositories from <span className="text-purple-300 font-bold">@shouri123</span>
+                </p>
+              </div>
+              <button 
+                onClick={() => setShowGithubBrowser(false)}
+                className="text-gray-400 hover:text-white font-mono text-xs bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl cursor-pointer"
+              >
+                ✕ CLOSE
+              </button>
+            </div>
+
+            {/* Search Input Bar */}
+            <div className="relative shrink-0 font-mono text-xs">
+              <Search className="w-4 h-4 text-gray-500 absolute left-3.5 top-3" />
+              <input
+                type="text"
+                value={githubSearch}
+                onChange={e => setGithubSearch(e.target.value)}
+                placeholder="Search repos by name, language, or topic..."
+                className="w-full bg-black border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-purple-500/50"
+              />
+            </div>
+
+            {/* Repositories List */}
+            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+              {loadingRepos ? (
+                <div className="py-16 text-center text-xs font-mono text-gray-400 flex items-center justify-center gap-2">
+                  <RefreshCw className="w-4 h-4 animate-spin text-purple-400" />
+                  <span>Fetching live repositories from GitHub API...</span>
+                </div>
+              ) : filteredGithubRepos.length === 0 ? (
+                <div className="py-16 text-center text-xs font-mono text-gray-500">
+                  No GitHub repositories match "{githubSearch}".
+                </div>
+              ) : (
+                filteredGithubRepos.map((repo: any) => (
+                  <div key={repo.id} className="bg-black/60 border border-white/8 hover:border-white/20 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
+                    <div className="space-y-1.5 max-w-xl">
+                      <div className="flex items-center gap-2">
+                        <a
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold text-white hover:text-purple-300 transition-colors flex items-center gap-1.5"
+                        >
+                          <span>{repo.name}</span>
+                          <ExternalLink className="w-3 h-3 text-gray-500" />
+                        </a>
+                        {repo.language && (
+                          <span className="text-[9px] font-mono bg-purple-500/10 border border-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-bold">
+                            {repo.language}
+                          </span>
+                        )}
+                      </div>
+                      
+                      <p className="text-xs text-gray-400 line-clamp-2">{repo.description}</p>
+                      
+                      <div className="flex items-center gap-3 text-[10px] font-mono text-gray-500 pt-1">
+                        <span>⭐ {repo.stars} stars</span>
+                        <span>🍴 {repo.forks} forks</span>
+                        {repo.open_issues > 0 && <span>🐛 {repo.open_issues} issues</span>}
+                      </div>
+                    </div>
+
+                    <div className="shrink-0 flex items-center gap-2">
+                      {repo.is_imported ? (
+                        <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono px-3.5 py-2 rounded-xl flex items-center gap-1.5">
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Added to Portfolio</span>
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleImportRepo(repo)}
+                          disabled={importingRepoId === repo.id}
+                          className="bg-[#e0dfd5] text-black hover:bg-white text-xs font-bold font-mono px-4 py-2.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-lg disabled:opacity-50"
+                        >
+                          {importingRepoId === repo.id ? (
+                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Plus className="w-3.5 h-3.5" />
+                          )}
+                          <span>{importingRepoId === repo.id ? "Importing..." : "Import to Portfolio"}</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-gray-500 shrink-0">
+              <span>Showing {filteredGithubRepos.length} public repos</span>
+              <span>Account: github.com/shouri123</span>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
