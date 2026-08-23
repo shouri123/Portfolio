@@ -51,7 +51,7 @@ A premium, highly interactive, and visually stunning developer portfolio and dig
 
 ## 📂 Project Structure
 
-```
+```text
 ├── .agent/                  # GSD agent configuration & workflows
 ├── .github/                 # GitHub Actions workflows (health checks, CI)
 │   └── workflows/
@@ -126,6 +126,7 @@ GITHUB_TOKEN=your_github_personal_access_token
 ### 4. Database Setup (Supabase)
 
 Run the SQL migration scripts located in the `supabase/migrations/` directory inside your Supabase SQL editor:
+
 * `20260613063809_create_contact_messages_table.sql`: Creates the contact messages table.
 * `20260613063857_create_projects_table_with_seed.sql`: Creates the projects table and initial seed data.
 * `20260824000000_create_system_health_table.sql`: Creates the system health telemetry table.
@@ -159,6 +160,7 @@ This compiles TypeScript, bundles static assets via Next.js Turbopack, and expor
 ### Deploying to Vercel
 
 The easiest way to deploy this portfolio is using Vercel:
+
 1. Connect your GitHub repository to Vercel.
 2. Configure your Environment Variables in the project settings (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `ADMIN_PASSWORD`, `JWT_SECRET`, `CRON_SECRET`).
 3. Deploy! Vercel will auto-detect Next.js and apply the `vercel.json` cron configurations.
