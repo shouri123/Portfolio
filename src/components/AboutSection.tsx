@@ -5,18 +5,23 @@ import GsapScrollRevealChars from "@/components/animations/GsapScrollRevealChars
 import Gsap3DTilt from "@/components/animations/Gsap3DTilt";
 import Image from "next/image";
 import GssocBadge from "@/components/GssocBadge";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
 
 export default function AboutSection() {
   const router = useRouter();
   const clickCountRef = useRef(0);
+  const [accessOverlay, setAccessOverlay] = useState(false);
 
   const handlePhotoClick = () => {
     clickCountRef.current += 1;
-    if (clickCountRef.current >= 3) {
-      router.push("/admin");
-      clickCountRef.current = 0;
+    if (clickCountRef.current >= 7) {
+      setAccessOverlay(true);
+      setTimeout(() => {
+        router.push("/admin/login");
+        clickCountRef.current = 0;
+        setAccessOverlay(false);
+      }, 1400);
     }
   };
   const headingSegments = [
@@ -106,6 +111,16 @@ export default function AboutSection() {
         </div>
 
       </div>
+
+      {accessOverlay && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-6 text-center font-mono">
+          <div className="bg-zinc-950 border border-primary/40 rounded-3xl p-8 max-w-sm w-full flex flex-col items-center gap-4 animate-pulse">
+            <span className="w-3 h-3 rounded-full bg-primary animate-ping" />
+            <h3 className="text-sm font-bold tracking-widest uppercase text-primary">SYSTEM ACCESS DETECTED</h3>
+            <p className="text-xs text-white/60">IDENTITY REQUIRED • Initializing security portal...</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
