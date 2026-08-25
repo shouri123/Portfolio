@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifySession } from "@/lib/auth";
-import { getArticles, saveArticle } from "@/lib/command-center-store";
+import { getArticles, saveArticle, ContentArticle } from "@/lib/command-center-store";
+import { stripHtml, validateString } from "@/lib/security";
 
 async function checkAuth() {
   const cookieStore = await cookies();
@@ -23,12 +24,29 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    if (!body.title) {
-      return NextResponse.json({ error: "Title is required" }, { status: 400 });
-    }
-    const saved = saveArticle(body);
+    const title = validateString(body.title, 150, "Title");
+    const summary = validateString(body.summary || "", 500, "Summary", true);
+    const readTime = validateString(body.readTime || "5 min read", 30, "Read Time", true);
+    const publishedAt = validateString(body.publishedAt || new Date().toISOString().split("T")[0], 30, "Published Date", true);
+    const category = body.category && ["Article", "Case Study", "Note", "Announcement"].includes(body.category)
+      ? body.category
+      : "Article";
+    const status: ContentArticle["status"] = body.status && ["Published", "Draft", "Archived"].includes(body.status)
+      ? body.status
+      : "Published";
+
+    const saved = saveArticle({
+      title: stripHtml(title),
+      summary: stripHtml(summary),
+      readTime: stripHtml(readTime),
+      publishedAt: stripHtml(publishedAt),
+      category,
+      status,
+      content: typeof body.content === "string" ? body.content.slice(0, 10000) : ""
+    });
+    
     return NextResponse.json(saved, { status: 201 });
-  } catch {
-    return NextResponse.json({ error: "Invalid body payload" }, { status: 400 });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || "Invalid body payload" }, { status: 400 });
   }
 }

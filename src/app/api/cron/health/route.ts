@@ -1,16 +1,41 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifySession } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { addActivityLog } from "@/lib/command-center-store";
 
 export const dynamic = "force-dynamic";
 
+async function isCronAuthorized(request: Request): Promise<boolean> {
+  const authHeader = request.headers.get("authorization");
+  const cronSecret = process.env.CRON_SECRET;
+
+  // 1. Bearer token check for Vercel Cron / GitHub Actions
+  if (cronSecret && authHeader === `Bearer ${cronSecret}`) {
+    return true;
+  }
+
+  // 2. Admin session verification for Command Center manual triggers
+  try {
+    const cookieStore = await cookies();
+    const session = cookieStore.get("admin_session")?.value;
+    if (session && verifySession(session)) {
+      return true;
+    }
+  } catch {}
+
+  // 3. Local development fallback only if not in production and no cron secret configured
+  if (process.env.NODE_ENV !== "production" && !cronSecret) {
+    return true;
+  }
+
+  return false;
+}
+
 export async function GET(request: Request) {
   try {
-    // 1. Validate Cron Secret Header (Vercel Cron & GitHub Actions pass this)
-    const authHeader = request.headers.get("authorization");
-    const cronSecret = process.env.CRON_SECRET;
-
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    // 1. Fail-closed Authorization check
+    if (!(await isCronAuthorized(request))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
