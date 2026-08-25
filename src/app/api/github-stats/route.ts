@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 60; // Cache for 1 minute
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET() {
   try {
     const headers: HeadersInit = {
       'Accept': 'application/json',
-      'User-Agent': 'Portfolio-App'
+      'User-Agent': 'Portfolio-App',
+      'Cache-Control': 'no-cache, no-store, must-revalidate'
     };
     
     if (process.env.GITHUB_TOKEN) {
@@ -14,11 +16,11 @@ export async function GET() {
     }
 
     // 1. Fetch user profile for public repo count
-    let publicRepos = 12; // Fallback value
+    let publicRepos = 19;
     try {
       const userRes = await fetch("https://api.github.com/users/shouri123", { 
         headers,
-        next: { revalidate: 3600 }
+        cache: "no-store"
       });
       if (userRes.ok) {
         const userData = await userRes.json();
@@ -29,12 +31,12 @@ export async function GET() {
     }
 
     // 2. Fetch contribution data
-    let totalContributions = 1462; // Fallback value
-    let longestStreak = 23; // Fallback value
+    let totalContributions = 1821;
+    let longestStreak = 23;
     try {
       const contribRes = await fetch("https://github-contributions-api.jogruber.de/v4/shouri123", {
         headers,
-        next: { revalidate: 3600 }
+        cache: "no-store"
       });
       if (contribRes.ok) {
         const data = await contribRes.json();
@@ -72,13 +74,17 @@ export async function GET() {
       totalContributions,
       longestStreak,
       publicRepos
+    }, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
     });
   } catch (err) {
     console.error("Error in github-stats route:", err);
     return NextResponse.json({
-      totalContributions: 1462,
+      totalContributions: 1821,
       longestStreak: 23,
-      publicRepos: 12
+      publicRepos: 19
     });
   }
 }

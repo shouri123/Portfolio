@@ -3,6 +3,9 @@ import { cookies } from "next/headers";
 import { verifySession } from "@/lib/auth";
 import { fetchProjects } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 async function checkAuth() {
   const cookieStore = await cookies();
   const session = cookieStore.get("admin_session")?.value;
@@ -17,7 +20,8 @@ export async function GET() {
   try {
     const headers: HeadersInit = {
       "Accept": "application/json",
-      "User-Agent": "Portfolio-Admin-App"
+      "User-Agent": "Portfolio-Admin-App",
+      "Cache-Control": "no-cache, no-store, must-revalidate"
     };
 
     if (process.env.GITHUB_TOKEN) {
@@ -27,7 +31,7 @@ export async function GET() {
     // Fetch all public repos for user shouri123
     const res = await fetch("https://api.github.com/users/shouri123/repos?per_page=100&sort=updated", {
       headers,
-      next: { revalidate: 60 }
+      cache: "no-store"
     });
 
     if (!res.ok) {

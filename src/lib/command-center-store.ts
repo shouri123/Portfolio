@@ -62,11 +62,21 @@ export interface GitHubActivityEvent {
   type: "pr_merged" | "issue_opened" | "contributor_joined" | "star_received" | "commit_pushed";
 }
 
+export interface ActivityDistribution {
+  commits: number;
+  codeReview: number;
+  issues: number;
+  pullRequests: number;
+}
+
 export interface RepoHealthItem {
   name: string;
   stars: number;
   forks: number;
   openIssues: number;
+  openPRs?: number;
+  contributors?: number;
+  totalCommits?: number;
   status: "Active" | "Healthy" | "Maintenance";
   lastCommit: string;
 }
@@ -77,11 +87,15 @@ export interface MaintainerMetrics {
   totalContributors: number;
   mergedPRs: number;
   openIssues: number;
+  openPRs?: number;
+  totalCommits?: number;
+  totalRepositoriesContributed?: number;
   lastActivity: string;
   prResponseQuality: string;
   issueActivity: string;
   contributorGrowthTrend: string;
   communityScore: string;
+  distribution?: ActivityDistribution;
 }
 
 let careerData: CareerProfile = {
@@ -206,25 +220,36 @@ let githubEvents: GitHubActivityEvent[] = [
 ];
 
 let repoHealthList: RepoHealthItem[] = [
-  { name: "Late-Meet", stars: 38, forks: 88, openIssues: 12, status: "Active", lastCommit: "18 min ago" },
-  { name: "Aven", stars: 24, forks: 16, openIssues: 5, status: "Active", lastCommit: "3 hr ago" },
-  { name: "Portfolio", stars: 12, forks: 8, openIssues: 2, status: "Active", lastCommit: "Just now" },
-  { name: "Chat-Buddy", stars: 18, forks: 12, openIssues: 4, status: "Healthy", lastCommit: "8 hr ago" },
-  { name: "WRAP-YOUR-GIT", stars: 15, forks: 9, openIssues: 1, status: "Healthy", lastCommit: "2 days ago" },
-  { name: "Student-Copilot", stars: 12, forks: 4, openIssues: 3, status: "Maintenance", lastCommit: "5 days ago" }
+  { name: "Late-Meet", stars: 44, forks: 97, openIssues: 128, openPRs: 76, contributors: 76, totalCommits: 1251, status: "Active", lastCommit: "2 days ago" },
+  { name: "Sanatan-Dharma", stars: 0, forks: 0, openIssues: 0, openPRs: 0, contributors: 1, totalCommits: 75, status: "Active", lastCommit: "Just now" },
+  { name: "INDEPENDENCE-DAY-2026", stars: 0, forks: 0, openIssues: 0, openPRs: 0, contributors: 1, totalCommits: 33, status: "Active", lastCommit: "Aug 15" },
+  { name: "Portfolio", stars: 1, forks: 1, openIssues: 0, openPRs: 0, contributors: 1, totalCommits: 18, status: "Active", lastCommit: "Just now" },
+  { name: "Snaply", stars: 0, forks: 0, openIssues: 0, openPRs: 0, contributors: 1, totalCommits: 4, status: "Active", lastCommit: "Aug 9" },
+  { name: "ashram_cup-website", stars: 0, forks: 0, openIssues: 0, openPRs: 0, contributors: 2, totalCommits: 6, status: "Active", lastCommit: "Aug 12" },
+  { name: "Aven", stars: 0, forks: 0, openIssues: 0, openPRs: 0, contributors: 1, totalCommits: 12, status: "Healthy", lastCommit: "3 months ago" },
+  { name: "chat-buddy", stars: 0, forks: 0, openIssues: 0, openPRs: 0, contributors: 2, totalCommits: 45, status: "Healthy", lastCommit: "1 month ago" }
 ];
 
 let maintainerMetrics: MaintainerMetrics = {
-  totalProjects: 6,
-  activeProjects: 3,
-  totalContributors: 50,
+  totalProjects: 19,
+  activeProjects: 6,
+  totalContributors: 76,
   mergedPRs: 200,
-  openIssues: 27,
-  lastActivity: "18 min ago",
+  openIssues: 128,
+  openPRs: 76,
+  totalCommits: 1816,
+  totalRepositoriesContributed: 44,
+  lastActivity: "Just now",
   prResponseQuality: "Excellent (< 2h avg)",
-  issueActivity: "High (daily triage)",
-  contributorGrowthTrend: "+18% this month",
-  communityScore: "91%"
+  issueActivity: "High (128 open issues, 76 open PRs)",
+  contributorGrowthTrend: "+76 contributors squad",
+  communityScore: "96%",
+  distribution: {
+    commits: 75,
+    codeReview: 17,
+    issues: 5,
+    pullRequests: 3
+  }
 };
 
 export function getCareerProfile(): CareerProfile {
@@ -296,6 +321,22 @@ export function deleteCRMMessage(id: string): boolean {
   const initialLength = crmMessages.length;
   crmMessages = crmMessages.filter(m => String(m.id) !== String(id));
   return crmMessages.length < initialLength;
+}
+
+export function setGitHubActivityEvents(events: GitHubActivityEvent[]) {
+  if (events && events.length > 0) {
+    githubEvents = [...events];
+  }
+}
+
+export function setRepoHealthItems(items: RepoHealthItem[]) {
+  if (items && items.length > 0) {
+    repoHealthList = [...items];
+  }
+}
+
+export function setMaintainerMetrics(metrics: Partial<MaintainerMetrics>) {
+  maintainerMetrics = { ...maintainerMetrics, ...metrics };
 }
 
 export function getGitHubActivityEvents(): GitHubActivityEvent[] {

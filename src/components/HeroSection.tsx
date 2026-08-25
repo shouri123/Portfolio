@@ -14,8 +14,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [stats, setStats] = useState({
-    commits: "1470",
-    repos: "18",
+    commits: "1821",
+    repos: "19",
     prReviews: "273"
   });
 

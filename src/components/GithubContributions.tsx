@@ -21,9 +21,9 @@ export default function GithubContributions() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({
-    totalContributions: "1470",
+    totalContributions: "1,821",
     longestStreak: "23 days",
-    publicRepos: "12"
+    publicRepos: "19"
   });
 
   useEffect(() => {
